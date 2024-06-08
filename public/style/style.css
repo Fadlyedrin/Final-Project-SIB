@@ -52,12 +52,15 @@ nav {
     font-size: 18px;
     width: 90%;
 }
+
+.hero button a {
+    font-size: 18px;
+}
+
+/* search */
 .search-form {
     width: 100%;
     position: relative;
-}
-.hero button a {
-    font-size: 18px;
 }
 
 .search-form input {
