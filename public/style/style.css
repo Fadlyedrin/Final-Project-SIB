@@ -1,0 +1,152 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+    --primary-color: #1f2544;
+    --secondary-color: #3c4775;
+    --tertiary-color: #279df2;
+    --body-font: Montserrat, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--body-font);
+}
+
+/* navbar */
+nav {
+    background-color: var(--primary-color);
+}
+
+.nav-item {
+    font-size: 16px;
+}
+
+.nav-link {
+    margin: 0 20px;
+    font-weight: 600;
+    color: black !important;
+}
+
+.nav-link.active {
+    font-weight: bold;
+    color: var(--tertiary-color) !important;
+}
+
+.nav-school {
+    background-color: white;
+}
+
+.top-bar {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* hero */
+.hero {
+    padding-bottom: 150px;
+    margin-top: 100px;
+}
+.hero p {
+    font-size: 18px;
+    width: 90%;
+}
+.search-form {
+    width: 100%;
+    position: relative;
+}
+.hero button a {
+    font-size: 18px;
+}
+
+.search-form input {
+    width: 882px;
+    padding: 0 30px;
+    border-radius: 50px;
+    bottom: none;
+    font-weight: 600;
+    font-size: 16px;
+    text-transform: capitalize;
+    position: relative;
+    color: black;
+    height: 58px;
+    background-color: #e9e8e8;
+    margin-top: 50px;
+    font-size: 22px;
+}
+
+.search-form button {
+    position: absolute;
+    right: 1px;
+    height: 55px;
+    border: none;
+    background-color: #e9e8e8;
+    top: 1px;
+    border-radius: 50px;
+    width: 100px;
+    font-size: 25px;
+}
+
+/* about */
+.about {
+    width: 100%;
+    background-color: var(--secondary-color);
+    margin-top: 50px;
+    padding: 50px 0;
+}
+
+.about h1,
+a {
+    font-size: 31px;
+    font-weight: bold;
+}
+
+.about p {
+    font-size: 16px;
+}
+
+/* info */
+.info {
+    height: 100%;
+}
+.info p {
+    font-size: 16px;
+}
+.info h1,
+a {
+    font-size: 31px;
+}
+.info button a {
+    font-size: 18px;
+}
+
+/* sekolah */
+.sekolah {
+    height: 100%;
+}
+.sekolah h1,
+a {
+    font-size: 31px;
+}
+.sekolah p {
+    font-size: 16px;
+}
+.sekolah button a {
+    font-size: 18px;
+}
+
+/* footer */
+footer {
+    margin-top: 50px;
+    padding: 15px;
+    background-color: var(--primary-color);
+    font-size: 14px;
+
+}
+
+
+/* card */
+.card-info {
+    box-shadow: 2px 4px 8px 0px rgba(138, 138, 138, 0.5);
+}
