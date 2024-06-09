@@ -33,7 +33,7 @@
 .sidebar .nav-link.active {
     color: white;
     background-color: var(--tertiary-color);
-    width: 180px;
+    width: 13rem;
     margin-left: 10px;
     border-radius: 10px;
 }
@@ -64,6 +64,16 @@
     background-color: #ffffff;
 }
 .form-search button {
-    border:1px solid var(--tertiary-color);
+    border: 1px solid var(--tertiary-color);
 }
 
+/* form register */
+
+.register-container {
+    width: 522px !important;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 30px;
+    border: 1px solid black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

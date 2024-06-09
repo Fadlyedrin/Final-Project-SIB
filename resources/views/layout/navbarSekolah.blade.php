@@ -6,7 +6,7 @@
       </nav>
       <nav class="navbar navbar-expand-lg navbar-light nav-school sticky-top">
         <div class="container">
-          <a class="navbar-brand" href="{{ route('index') }}"
+          <a class="navbar-brand" href="{{ ('/') }}"
             ><img src="assets/logo2.png" alt=""
           /></a>
             <img class="navbar-brand" src="assets/Logo-sekolah.png" alt=""
@@ -29,7 +29,7 @@
                 <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" aria-current="{{ request()->is('dashboard') ? 'page' : false }}" href="{{ route('dashboardSekolah') }}">Tentang Sekolah</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link {{ request()->is('dataguru') ? 'active' : '' }}" aria-current="{{ request()->is('dataguru') ? 'page' : false }}" href="{{ route('dataGuru') }}">Data Guru</a>
+                <a class="nav-link {{ request()->is('guru') ? 'active' : '' }}" aria-current="{{ request()->is('guru') ? 'page' : false }}" href="{{ route('guru') }}">Data Guru</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link {{ request()->is('prestasi','detailprestasi') ? 'active' : '' }}" aria-current="{{ request()->is('prestasi') ? 'page' : false }}" href="{{ route('prestasi') }}">Prestasi</a>

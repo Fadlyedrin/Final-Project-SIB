@@ -47,4 +47,16 @@ class AdminController extends Controller
     {
         return view('admin.editInfoTerkini');
     }
+    public function dataPengguna() 
+    {
+        return view('superadmin.dataPengguna');
+    }
+    public function editDataPengguna() 
+    {
+        return view('superadmin.editDataPengguna');
+    }
+    public function tambahDataPengguna() 
+    {
+        return view('superadmin.tambahDataPengguna');
+    }
 }

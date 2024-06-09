@@ -18,8 +18,8 @@
         </button>
       </div>
       <div class="col-12 col-md-4 col-lg-2">
-        <i class="bi bi-bell text-light me-5" style="font-size: 25px"></i>
-        <button class="btn btn-primary " style="padding: 8px 18px">Keluar<i class="bi bi-box-arrow-right ms-2"></i></button>
+        <a href=""><i class="bi bi-bell text-light me-5" style="font-size: 25px"></i></a>
+        <a href=""><button class="btn btn-primary " style="padding: 8px 18px">Keluar<i class="bi bi-box-arrow-right ms-2"></i></button></a>
       </div>
     </nav>
     </div>
@@ -28,7 +28,7 @@
     <div class="row">
     <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
       <a class="navbar-brand d-flex justify-content-center " href=""
-        ><img src="assets/logo.png" class="" alt=""
+        ><img src="assets/logo.png" class="img-fluid" alt="logo"
       /></a>
       <div class="position-sticky">
         <ul class="nav flex-column mt-5">
@@ -38,6 +38,15 @@
               Utama
             </a>
           </li>
+
+          {{-- superadmin --}}
+          <li class="nav-item mb-3">
+            <a class="nav-link {{ request()->is('datapengguna','tambahdatapengguna','editdatapengguna') ? 'active' : '' }}" aria-current="page" href="{{ route('dataPengguna') }}">
+              <i class="bi bi-people-fill me-3 "></i>
+              Data Pengguna
+            </a>
+          </li>
+          {{-- superadmin --}}
           <li class="nav-item mb-3">
             <a class="nav-link {{ request()->is('datasekolah','tambahdatasekolah','editdatasekolah') ? 'active' : '' }}" href="{{ route('dataSekolah') }}">
               <i class="bi bi-bank me-3"></i>

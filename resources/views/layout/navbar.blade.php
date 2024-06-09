@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="{{ route('index') }}"
+        <a class="navbar-brand" href="{{ ('/') }}"
           ><img src="assets/logo.png" alt=""
         /></a>
         <button
@@ -19,7 +19,7 @@
             <li class="nav-item">
               <a
                 class="nav-link fw-bold text-light"
-                href="{{ route('index') }}"
+                href="{{ ('/') }}"
                 >Beranda</a
               >
             </li>

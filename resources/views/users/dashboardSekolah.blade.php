@@ -1,4 +1,4 @@
-@extends('layout.master2')
+@extends('layout.main')
 @section('title', 'Dashboard Sekolah')
 
 @section('content')

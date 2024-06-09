@@ -24,7 +24,7 @@ class UserController extends Controller
     {
         return view('users.dashboardSekolah');
     }
-    public function dataGuru() 
+    public function guru() 
     {
         return view('users.dataGuru');
     }
