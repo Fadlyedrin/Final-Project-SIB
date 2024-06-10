@@ -16,11 +16,6 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-
 Route::get('/', [UserController::class, 'index'])->name('index');
 Route::get('/sekolah', [UserController::class, 'pencarianSekolah'])->name('sekolah');
 Route::get('/infosekolah', [UserController::class, 'pencarianInfo'])->name('infosekolah');
