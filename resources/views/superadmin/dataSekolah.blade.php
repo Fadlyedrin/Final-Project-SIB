@@ -17,7 +17,7 @@
                     </form>
                 </div>
                 <div>
-                    <a href="{{ route('tambahDataSekolah') }}"><button class="btn ms-4 text-light fw-medium py-2" style="font-size: 20px; background-color:var(--tertiary-color)">Tambah Data
+                    <a href="{{ route('tambahDataSekolahSuperadmin') }}"><button class="btn ms-4 text-light fw-medium py-2" style="font-size: 20px; background-color:var(--tertiary-color)">Tambah Data
                             +</button></a>
                 </div>
             </div>
@@ -31,10 +31,10 @@
                         <tr class="text-center">
                             <th class="text-center">No.</th>
                             <th class="text-center">Nama</th>
-                            <th class="text-center">Nama Sekolah</th>
+                            <th class="text-center">Admin</th>
                             <th class="text-center">Email</th>
                             <th class="text-center">Telepon</th>
-                            <th class="text-center">Role</th>
+                            <th class="text-center">Alamat</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -67,12 +67,17 @@
         </div>
     </div>
 @endsection
+<style>
+    .dt-search {
+        display: none;
+    }
+</style>
 @push('scripts')
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.min.js"></script>
     <script>
         $(document).ready(function() {
-            var table = $('#datatable-pengguna').DataTable({
+            var table = $('#datatable-sekolah').DataTable({
                 paging: true,
                 responsive: true,
                 searching: true,
@@ -80,26 +85,45 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route('getDatatablePengguna') }}',
+                    url: '{{ route('getDatatableSekolah') }}',
                     type: "GET",
                 },
-                columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                    { data: 'name', name: 'name' },
-                    { data: 'nama_sekolah', name: 'nama_sekolah' },
-                    { data: 'email', name: 'email' },
-                    { data: 'no_telepon', name: 'no_telepon' },
-                    { data: 'role', name: 'role' },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama',
+                        name: 'nama'
+                    },
+                    {
+                        data: 'nama_user',
+                        name: 'nama_user'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'no_telepon',
+                        name: 'no_telepon'
+                    },
+                    {
+                        data: 'alamat',
+                        name: 'alamat'
+                    },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false,
                         render: function(data, type, row) {
-                            var editUrl = "{{ route('editDataPengguna', ['user' => ':id']) }}".replace(':id', row.id);
+                            var editUrl = "{{ route('editDataSekolahSuperadmin', ['sekolah' => ':id']) }}".replace(':id', row.id);
                             return `
                                 <a href="${editUrl}"><button class="btn btn-sm btn-primary me-2"><i class="bi bi-pencil"></i></button></a>
-                                <button class="btn btn-sm btn-danger delete-btn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-user-id="${row.id}"><i class="bi bi-trash-fill"></i></button>
+                                <button class="btn btn-sm btn-danger delete-btn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-sekolah-id="${row.id}"><i class="bi bi-trash-fill"></i></button>
                             `;
                         }
                     }
@@ -111,11 +135,11 @@
                 table.column(1).search(value).draw();
             });
 
-            $('#exampleModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget); 
-                var userId = button.data('user-id'); 
+            $('#exampleModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var sekolahId = button.data('sekolah-id');
                 var modal = $(this);
-                var actionUrl = "{{ route('deleteDataPengguna', ['user' => ':id']) }}".replace(':id', userId);
+                var actionUrl = "{{ route('deleteDataSekolahSuperadmin', ['sekolah' => ':id']) }}".replace(':id', sekolahId);
                 modal.find('#deleteForm').attr('action', actionUrl);
             });
         });

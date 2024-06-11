@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SuperadminController;
 
 // Halaman user
 Route::get('/', [UserController::class, 'index'])->name('index');
@@ -52,16 +53,21 @@ Route::prefix('')->middleware('authenticate')->group(function () {
         Route::delete('/deletedatainfo/{info}', [AdminController::class , 'deleteDataInfo'])->name('deleteDataInfo');
         
         Route::prefix('')->middleware('role:superadmin')->group(function () {
-            Route::get('/pengguna', [AdminController::class, 'dataPengguna'])->name('dataPengguna');
-            Route::get('/datapengguna', [AdminController::class , 'getDatatablePengguna'])->name('getDatatablePengguna');
-            Route::get('/tambahdatapengguna', [AdminController::class, 'tambahDataPengguna'])->name('tambahDataPengguna');
-            Route::post('/storedatapengguna', [AdminController::class , 'storeDataPengguna'])->name('storeDataPengguna');
-            Route::get('/editdatapengguna/{user}', [AdminController::class, 'editDataPengguna'])->name('editDataPengguna');
-            Route::put('/updatedatapengguna/{user}', [AdminController::class , 'updateDataPengguna'])->name('updateDataPengguna');
-            Route::delete('/deletedatapengguna/{user}', [AdminController::class , 'deleteDataPengguna'])->name('deleteDataPengguna'); 
+            Route::get('/pengguna', [SuperadminController::class, 'dataPengguna'])->name('dataPengguna');
+            Route::get('/datapengguna', [SuperadminController::class , 'getDatatablePengguna'])->name('getDatatablePengguna');
+            Route::get('/tambahdatapengguna', [SuperadminController::class, 'tambahDataPengguna'])->name('tambahDataPengguna');
+            Route::post('/storedatapengguna', [SuperadminController::class , 'storeDataPengguna'])->name('storeDataPengguna');
+            Route::get('/editdatapengguna/{user}', [SuperadminController::class, 'editDataPengguna'])->name('editDataPengguna');
+            Route::put('/updatedatapengguna/{user}', [SuperadminController::class , 'updateDataPengguna'])->name('updateDataPengguna');
+            Route::delete('/deletedatapengguna/{user}', [SuperadminController::class , 'deleteDataPengguna'])->name('deleteDataPengguna'); 
             
-            Route::get('/sekolah-s', [AdminController::class, 'dataSekolahSuperadmin'])->name('dataSekolahSuperadmin');
-            Route::get('/datasekolah-s', [AdminController::class , 'getDatatableSekolahSuperadmin'])->name('getDatatableSekolahSuperadmin');
+            Route::get('/sekolah-s', [SuperadminController::class, 'dataSekolahSuperadmin'])->name('dataSekolahSuperadmin');
+            Route::get('/datasekolah-s', [SuperadminController::class , 'getDatatableSekolah'])->name('getDatatableSekolah');
+            Route::get('/tambahdatasekolah-s', [SuperadminController::class, 'tambahDataSekolahSuperadmin'])->name('tambahDataSekolahSuperadmin');
+            Route::post('/storedatasekolah-s', [SuperadminController::class , 'storeDataSekolahSuperadmin'])->name('storeDataSekolahSuperadmin');
+            Route::get('/editdatasekolah-s/{sekolah}', [SuperadminController::class, 'editDataSekolahSuperadmin'])->name('editDataSekolahSuperadmin');
+            Route::put('/updatedatasekolah-s/{sekolah}', [SuperadminController::class , 'updateDataSekolahSuperadmin'])->name('updateDataSekolahSuperadmin');
+            Route::delete('/deletedatasekolah-s/{sekolah}', [SuperadminController::class , 'deleteDataSekolahSuperadmin'])->name('deleteDataSekolahSuperadmin');
         });
     }); 
 }); 

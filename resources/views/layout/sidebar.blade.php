@@ -48,7 +48,7 @@
               </a>
             </li>
             <li class="nav-item mb-3">
-              <a class="nav-link {{ request()->is('sekolah-s','datasekolah-s','tambahdatasekolah','editdatasekolah', 'editdatasekolah/*') ? 'active' : '' }}" href="{{ route('dataSekolahSuperadmin') }}">
+              <a class="nav-link {{ request()->is('sekolah-s','datasekolah-s','tambahdatasekolah-s','tambahdatasekolah','editdatasekolah', 'editdatasekolah/*') ? 'active' : '' }}" href="{{ route('dataSekolahSuperadmin') }}">
                 <i class="bi bi-bank me-3"></i>
                 Data Sekolah
               </a>

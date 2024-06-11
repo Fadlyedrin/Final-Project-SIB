@@ -72,7 +72,11 @@
         </div>
     </div>
 @endsection
-
+<style>
+    .dt-search {
+        display: none;
+    }
+</style>
 @push('scripts')
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.min.js"></script>

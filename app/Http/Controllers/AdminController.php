@@ -45,98 +45,6 @@ class AdminController extends Controller
         return view('admin.editInfoTerkini');
     }
 
-    //Kelola data pengguna
-    public function dataPengguna(Request $request, User $user)
-    {
-        return view('superadmin.dataPengguna', compact('user'));
-    }
-
-    public function getDatatablePengguna(Request $request)
-    {
-        $users = User::with(['sekolah', 'roles'])->get();
-        
-        return DataTables::of($users)
-            ->addIndexColumn()
-            ->addColumn('nama_sekolah', function ($user) {
-                return $user->sekolah ? $user->sekolah->nama : '-';
-            })
-            ->addColumn('role', function ($user) {
-                return $user->roles->first() ? $user->roles->first()->name : '-';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
-    }
-    
-    public function tambahDataPengguna() 
-    {
-        return view('superadmin.tambahDataPengguna');
-    }
-    public function storeDataPengguna(UserCreateRequest $request) 
-    {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'no_telepon' => $request->no_telepon, 
-        ]);
-
-        $roleName = $request->role == 'superadmin' ? 'superadmin' : 'admin';
-        $role = Role::where('name', $roleName)->first();
-
-        if ($role) {
-            $user->assignRole($role);
-        }
-
-        return redirect()->route('dataPengguna')->with('success', 'Data Admin Berhasil dibuat.');
-    }
-
-    public function editDataPengguna(User $user) 
-    {
-        return view('superadmin.editDataPengguna', compact('user'));
-    }
-    
-    public function updateDataPengguna(Request $request, User $user)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => $request->email != $user->email ? 'required|email|unique:user,email' : 'required|email',
-            'role' => 'required|not_in:0',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('editDataPengguna', ['user' => $user->id])
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->no_telepon = $request->no_telepon;
-        
-        $roleName = $request->role == 'superadmin' ? 'superadmin' : 'admin';
-        $role = Role::where('name', $roleName)->first();
-
-        if ($role) {
-            $user->assignRole($role);
-        }
-        
-        $user->save();
-            
-        return redirect()->route('dataPengguna')
-        ->with('success', 'Data Admin Berhasil diubah.');
-    }
-
-    public function deleteDataPengguna(Request $request, User $user)
-    {
-        if (Auth::id() == $user->id) {
-            return redirect()->back()->with('delete_error', 'You cannot delete yourself');
-        }
-
-        $user->delete();
-        return redirect()->route('dataPengguna')->with('success', 'Data Admin berhasil dihapus.');
-    }
-    
-
     //Kelola data sekolah admin
     public function dataSekolah(Request $request, Sekolah $sekolah)
     {
@@ -245,7 +153,7 @@ class AdminController extends Controller
         $sekolah->save();
             
         return redirect()->route('dataSekolah')
-            ->with('success', 'Data Admin Berhasil diubah.');
+            ->with('success', 'Data Sekolah Berhasil diubah.');
     }
     
     public function deleteDataSekolah(Request $request, Sekolah $sekolah)
@@ -266,22 +174,5 @@ class AdminController extends Controller
         return redirect()->route('dataSekolah')->with('success', 'Data Sekolah berhasil dihapus.');
     }
     
-    //Kelola data sekolah superadmin
-    public function dataSekolahSuperadmin(Request $request, Sekolah $sekolah)
-    {
-        return view('superadmin.dataSekolah', compact('sekolah'));
-    }
     
-    public function getDatatableSekolah(Request $request)
-    {
-        $sekolah = Sekolah::with(['user'])->get();
-        
-        return DataTables::of($sekolah)
-            ->addIndexColumn()
-            ->addColumn('nama_user', function ($sekolah) {
-                return $sekolah->user ? $sekolah->user->name : '-';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
-    }
 }
