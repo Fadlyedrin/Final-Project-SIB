@@ -43,7 +43,19 @@
                         <h2 class="text-center" style="font-size: 40px">
                             Login
                         </h2>
-                        <form method="" >
+
+                        <!-- error message -->
+                        @if (session('error'))
+                            <div class="alert alert-danger">{{ session('error') }}</div>
+                        @endif
+
+                        <!-- success message -->
+                        @if (session('success'))
+                            <div class="alert alert-success">{{ session('success') }}</div>
+                        @endif
+                        
+                        <form action="{{ route('login') }}" method="POST">
+                            @csrf
                             <div class="form-group my-4">
                                 <label for="email" class="form-label"
                                     >Email</label
@@ -52,7 +64,9 @@
                                     type="email"
                                     class="form-control"
                                     id="email"
+                                    name="email"
                                     placeholder="Masukan Email"
+                                    required
                                 />
                             </div>
                             <div class="form-group my-4">
@@ -65,6 +79,7 @@
                                     id="password"
                                     placeholder="Masukan Kata Sandi"
                                     name="password"
+                                    required
                                 />
                             </div>
 

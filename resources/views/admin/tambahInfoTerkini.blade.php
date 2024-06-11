@@ -70,6 +70,7 @@
                         <li><a class="dropdown-item" href="#" >Prestasi</a></li>
                         <li><a class="dropdown-item" href="#">PPDB</a></li>
                         <li><a class="dropdown-item" href="#">Event Sekolah</a></li>
+                        <li><a class="dropdown-item" href="#">Lainnya</a></li>
                     </ul>
                     </div>
                 </div>

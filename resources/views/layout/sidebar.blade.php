@@ -1,4 +1,4 @@
-
+@auth
    <div class="container-fluid ">
     <div class="row">
         <nav class="navbar navbar-light p-4 z-2 top-bar sticky-top">
@@ -19,7 +19,7 @@
       </div>
       <div class="col-12 col-md-4 col-lg-2">
         <a href=""><i class="bi bi-bell text-light me-5" style="font-size: 25px"></i></a>
-        <a href=""><button class="btn btn-primary " style="padding: 8px 18px">Keluar<i class="bi bi-box-arrow-right ms-2"></i></button></a>
+        <a href="{{ route('logout') }}"><button class="btn btn-primary " style="padding: 8px 18px">Keluar<i class="bi bi-box-arrow-right ms-2"></i></button></a>
       </div>
     </nav>
     </div>
@@ -28,31 +28,40 @@
     <div class="row">
     <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
       <a class="navbar-brand d-flex justify-content-center " href=""
-        ><img src="assets/logo.png" class="img-fluid" alt="logo"
+        ><img src="{{asset('assets/logo.png')}}" class="img-fluid" alt="logo"
       /></a>
       <div class="position-sticky">
         <ul class="nav flex-column mt-5">
           <li class="nav-item mb-3">
-            <a class="nav-link {{ request()->is('admin') ? 'active' : '' }}" aria-current="page" href="{{ route('index') }}">
+            <a class="nav-link {{ request()->is('admin') ? 'active' : '' }}" aria-current="page" href="{{ route('admin') }}">
               <i class="bi bi-house me-3 "></i>
               Utama
             </a>
           </li>
 
           {{-- superadmin --}}
-          <li class="nav-item mb-3">
-            <a class="nav-link {{ request()->is('datapengguna','tambahdatapengguna','editdatapengguna') ? 'active' : '' }}" aria-current="page" href="{{ route('dataPengguna') }}">
-              <i class="bi bi-people-fill me-3 "></i>
-              Data Pengguna
-            </a>
-          </li>
-          {{-- superadmin --}}
+          @if (Auth::user()->hasRole('superadmin'))
+            <li class="nav-item mb-3">
+              <a class="nav-link {{ request()->is('pengguna','datapengguna','tambahdatapengguna','editdatapengguna', 'editdatapengguna/*') ? 'active' : '' }}" aria-current="page" href="{{ route('dataPengguna') }}">
+                <i class="bi bi-people-fill me-3 "></i>
+                Data Pengguna
+              </a>
+            </li>
+            <li class="nav-item mb-3">
+              <a class="nav-link {{ request()->is('datasekolah-s','tambahdatasekolah','editdatasekolah') ? 'active' : '' }}" href="{{ route('dataSekolahSuperadmin') }}">
+                <i class="bi bi-bank me-3"></i>
+                Data Sekolah
+              </a>
+            </li>
+          @else
           <li class="nav-item mb-3">
             <a class="nav-link {{ request()->is('datasekolah','tambahdatasekolah','editdatasekolah') ? 'active' : '' }}" href="{{ route('dataSekolah') }}">
               <i class="bi bi-bank me-3"></i>
               Data Sekolah
             </a>
           </li>
+          @endif
+
           <li class="nav-item mb-3">
             <a class="nav-link {{ request()->is('dataguru','tambahdataguru','editdataguru') ? 'active' : '' }}" href="{{ route('dataGuru') }}">
                 <i class="bi bi-pass me-3"></i>
@@ -71,3 +80,4 @@
     </nav>
     </div>
 </div>
+@endauth
