@@ -128,7 +128,7 @@
 
                     <div class="mb-3">
                         <label for="admin" class="form-label">Admin</label>
-                        <select name="admin" class="form-select" required>
+                        <select name="admin" class="form-select border border-dark" required>
                             <option value="0" {{ old('admin') == '0' ? 'selected' : '' }}>Pilih Admin</option>
                             @foreach ($admins as $admin)
                                 <option value="{{ $admin->id }}">{{ $admin->name }}</option>

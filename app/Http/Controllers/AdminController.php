@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GuruCreateRequest;
 use App\Http\Requests\SekolahCreateRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Models\GambarSekolah;
+use App\Models\Guru;
 use App\Models\Sekolah;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,18 +21,6 @@ class AdminController extends Controller
     public function index() 
     {
         return view('admin.index');
-    }
-    public function dataGuru() 
-    {
-        return view('admin.dataGuru');
-    }
-    public function tambahDataGuru() 
-    {
-        return view('admin.tambahDataGuru');
-    }
-    public function editDataGuru() 
-    {
-        return view('admin.editDataGuru');
     }
     public function dataInfo() 
     {
@@ -174,5 +164,112 @@ class AdminController extends Controller
         return redirect()->route('dataSekolah')->with('success', 'Data Sekolah berhasil dihapus.');
     }
     
+    //Kelola data guru admin
+    public function dataGuru(Request $request, Guru $guru)
+    {
+        return view('admin.dataGuru', compact('guru'));
+    }
     
+    public function getDatatableGuru(Request $request)
+    {
+        $user = Auth::user();
+    
+        $sekolahId = $user->sekolah ? $user->sekolah->id : null;
+
+        if (!$sekolahId) {
+            return DataTables::of(collect())->make(true);
+        }
+
+        $guru = Guru::where('id_sekolah', $sekolahId)->with('sekolah')->get();
+        
+        return DataTables::of($guru)
+            ->addIndexColumn()
+            ->addColumn('nama_sekolah', function ($guru) {
+                return $guru->sekolah ? $guru->sekolah->nama : '-';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    public function tambahDataGuru() 
+    {
+        return view('admin.tambahDataGuru');
+    }
+    
+    public function storeDataGuru(GuruCreateRequest $request) 
+    {
+        $user = Auth::user();
+        $sekolah = $user->sekolah;
+    
+        $file1 = $request->file('gambar');
+        $fileName = time() . '_' . $file1->getClientOriginalName();
+        $file1->move('storage/gambar_guru', $fileName);
+
+        Guru::create([
+            'id_sekolah' => $sekolah->id,
+            'nama' => $request->nama,
+            'pendidikan' => $request->pendidikan,
+            'kategori_kepegawaian' => $request->kategori_kepegawaian,
+            'status' => $request->status,
+            'jabatan' => $request->jabatan,
+            'gambar' => '/storage/gambar_guru/' . $fileName,
+        ]);
+
+        return redirect()->route('dataGuru')->with('success', 'Data Guru Berhasil dibuat.');
+    }
+
+    public function editDataGuru(Guru $guru) 
+    {
+        return view('admin.editDataGuru', compact('guru'));
+    }
+    
+    public function updateDataGuru(Request $request, Guru $guru)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required',
+            'pendidikan' => 'required',
+            'kategori_kepegawaian' => 'required',
+            'status' => 'required',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('editDataGuru', ['guru' => $guru->id])
+                ->withErrors($validator)
+                ->withInput(); 
+        }
+
+        $guru->nama = $request->nama;
+        $guru->pendidikan = $request->pendidikan;
+        $guru->kategori_kepegawaian = $request->kategori_kepegawaian;
+        $guru->status = $request->status;
+        $guru->jabatan = $request->jabatan;
+
+        if ($request->hasFile('gambar')) {
+            $imagePath = public_path($guru->gambar);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+
+            $file = $request->file('gambar');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move('storage/gambar_guru', $fileName);
+            $guru->gambar = '/storage/gambar_guru/' . $fileName;
+        }
+
+        $guru->save();
+            
+        return redirect()->route('dataGuru')
+            ->with('success', 'Data Guru Berhasil diubah.');
+    }
+    
+    public function deleteDataGuru(Request $request, Guru $guru)
+    {
+        $imagePath = public_path($guru->gambar);
+        if (file_exists($imagePath))
+            unlink($imagePath);
+        
+        $guru->delete();
+        return redirect()->route('dataGuru')->with('success', 'Data Guru berhasil dihapus.');
+    }
 }

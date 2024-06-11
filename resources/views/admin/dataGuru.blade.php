@@ -16,9 +16,15 @@
                         <button class="btn" type="submit"><i class="bi bi-search"></i></button>
                     </form>
                 </div>
+                @if(Auth::user()->sekolah)
                 <div>
                     <a href="{{ route('tambahDataGuru') }}"><button class="btn ms-4 text-light fw-medium py-2" style="font-size: 20px; background-color:var(--tertiary-color)">Tambah Data +</button></a>
                 </div>
+                @else
+                <div>
+                    <button class="btn ms-4 text-light fw-medium py-2" style="font-size: 20px; background-color:var(--tertiary-color)" disabled>Tambah Data +</button>
+                </div>
+                @endif
             </div>
             <div class="col-lg-9 col-md-8 offset-lg-2 offset-md-3 mt-4 ps-5">
                 <!-- error message -->
@@ -68,7 +74,11 @@
         </div>
     </div>
 @endsection
-
+<style>
+    .dt-search {
+        display: none;
+    }
+</style>
 @push('scripts')
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.min.js"></script>
@@ -92,8 +102,8 @@
                         searchable: false
                     },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'nama',
+                        name: 'nama'
                     },
                     {
                         data: 'nama_sekolah',
@@ -109,7 +119,7 @@
                     },
                     {
                         data: 'status',
-                        name: 'status'
+                        name: 'status',
                     },
                     {
                         data: 'jabatan',
@@ -124,7 +134,7 @@
                             var editUrl = "{{ route('editDataGuru', ['guru' => ':id']) }}".replace(':id', row.id);
                             return `
                                 <a href="${editUrl}"><button class="btn btn-sm btn-primary me-2"><i class="bi bi-pencil"></i></button></a>
-                                <button class="btn btn-sm btn-danger delete-btn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-user-id="${row.id}"><i class="bi bi-trash-fill"></i></button>
+                                <button class="btn btn-sm btn-danger delete-btn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-guru-id="${row.id}"><i class="bi bi-trash-fill"></i></button>
                             `;
                         }
                     }

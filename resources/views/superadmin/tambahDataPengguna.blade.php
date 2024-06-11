@@ -66,7 +66,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="role" class="form-label">Role</label>
-                        <select name="role" class="form-select" required>
+                        <select name="role" class="form-select border border-dark" required>
                             <option value="0" {{ old('role') == '0' ? 'selected' : '' }}>Pilih Role</option>
                             <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin Sekolah</option>
                             <option value="superadmin" {{ old('role') == 'superadmin' ? 'selected' : '' }}>Super Admin</option>
