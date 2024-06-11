@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GuruCreateRequest;
+use App\Http\Requests\InfoCreateRequest;
 use App\Http\Requests\SekolahCreateRequest;
 use App\Http\Requests\UserCreateRequest;
+use App\Models\GambarInfo;
 use App\Models\GambarSekolah;
 use App\Models\Guru;
+use App\Models\Info;
 use App\Models\Sekolah;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -355,5 +358,127 @@ class SuperadminController extends Controller
         
         $guru->delete();
         return redirect()->route('dataGuruSuperadmin')->with('success', 'Data Guru berhasil dihapus.');
+    }
+
+    //Kelola data info admin
+    public function dataInfo(Request $request, Info $info)
+    {
+        return view('admin.dataInfo', compact('info'));
+    }
+    
+    public function getDatatableInfo(Request $request)
+    {
+        $user = Auth::user();
+    
+        $sekolahId = $user->sekolah ? $user->sekolah->id : null;
+
+        if (!$sekolahId) {
+            return DataTables::of(collect())->make(true);
+        }
+
+        // $info = Info::where('id_sekolah', $sekolahId)->with('sekolah')->get();
+        $info = Info::all();
+
+        if ($request->filled('kategori')) {
+            $info->where('kategori', $request->kategori);
+        }
+        
+        return DataTables::of($info)
+            ->addIndexColumn()
+            ->addColumn('nama_sekolah', function ($info) {
+                return $info->sekolah ? $info->sekolah->nama : '-';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    public function tambahDataInfo() 
+    {
+        return view('admin.tambahInfoTerkini');
+    }
+    
+    public function storeDataInfo(InfoCreateRequest $request) 
+    {
+        $user = Auth::user();
+        $sekolah = $user->sekolah;
+
+        $info = Info::create([
+            'id_sekolah' => $sekolah->id,
+            'judul' => $request->judul,
+            'deskripsi' => $request->deskripsi,
+            'kategori' => $request->kategori,
+        ]);
+
+        if ($request->hasFile('gambar_info')) {
+            foreach ($request->file('gambar_info') as $file) {
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->move('storage/gambar_info', $fileName);
+    
+                GambarInfo::create([
+                    'id_info' => $info->id,
+                    'gambar' => '/storage/gambar_info/' . $fileName,
+                ]);
+            }
+        }
+
+        return redirect()->route('dataInfo')->with('success', 'Data Info Berhasil dibuat.');
+    }
+
+    public function editDataInfo(Info $info) 
+    {
+        return view('admin.editInfoTerkini', compact('info'));
+    }
+    
+    public function updateDataInfo(Request $request, Info $info)
+    {
+        $validator = Validator::make($request->all(), [
+            'judul' => 'required',
+            'deskripsi' => 'required',
+            'kategori' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('editDataInfo', ['info' => $info->id])
+                ->withErrors($validator)
+                ->withInput(); 
+        }
+
+        $info->judul = $request->judul;
+        $info->deskripsi = $request->deskripsi;
+        $info->kategori = $request->kategori;
+
+        if ($request->hasFile('gambar_info')) {
+            foreach ($request->file('gambar_info') as $file) {
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->move('storage/gambar_info', $fileName);
+
+                foreach ($info->gambarInfo as $gambar) {
+                    $oldImagePath = public_path($gambar->gambar);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                    $gambar->update(['gambar' => '/storage/gambar_info/' . $fileName]);
+                }
+            }
+        }
+        
+        $info->save();
+            
+        return redirect()->route('dataInfo')
+            ->with('success', 'Data Info Berhasil diubah.');
+    }
+    
+    public function deleteDataInfo(Request $request, Info $info)
+    {
+        foreach ($info->gambarInfo as $gambar) {
+            $imagePath = public_path($gambar->gambar);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+            $gambar->delete();
+        }
+        
+        $info->delete();
+        return redirect()->route('dataInfo')->with('success', 'Data Info berhasil dihapus.');
     }
 }
