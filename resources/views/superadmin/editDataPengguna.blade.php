@@ -47,27 +47,6 @@
                             @endif
                         </div>
                     </div>
-                    <div class="mb-3 ">
-                        <label for="password" class="form-label">Password
-                        </label>
-                        <input type="password" class="form-control border border-dark {{ $errors->has('password') ? 'is-invalid' : '' }}" name="password" id="password" placeholder="Masukkan password" />
-                        @if ($errors->has('password'))
-                            <div class="invalid-feedback">
-                                <b>{{ $errors->first('password') }}</b>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="mb-3 ">
-                        <label for="password_confirmation" class="form-label">Konfirmasi Password
-                        </label>
-                        <input type="password" class="form-control border border-dark  {{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}" name="password_confirmation"
-                            id="password_confirmation" placeholder="Konfirmasi password" />
-                        @if ($errors->has('password_confirmation'))
-                            <div class="invalid-feedback">
-                                <b>{{ $errors->first('password_confirmation') }}</b>
-                            </div>
-                        @endif
-                    </div>
                     <div class="mb-3">
                         <label for="role" class="form-label">Role</label>
                         <select name="role" class="form-select" required>

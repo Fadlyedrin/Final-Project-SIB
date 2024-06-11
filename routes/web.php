@@ -5,21 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 // Halaman user
 Route::get('/', [UserController::class, 'index'])->name('index');
 Route::get('/sekolah', [UserController::class, 'pencarianSekolah'])->name('sekolah');
@@ -45,26 +30,38 @@ Route::prefix('')->middleware('authenticate')->group(function () {
         
         Route::get('/datasekolah', [AdminController::class, 'dataSekolah'])->name('dataSekolah');
         Route::get('/tambahdatasekolah', [AdminController::class, 'tambahDataSekolah'])->name('tambahDataSekolah');
-        Route::get('/editdatasekolah', [AdminController::class, 'editDataSekolah'])->name('editDataSekolah');
+        Route::post('/storedatasekolah', [AdminController::class , 'storeDataSekolah'])->name('storeDataSekolah');
+        Route::get('/editdatasekolah/{sekolah}', [AdminController::class, 'editDataSekolah'])->name('editDataSekolah');
+        Route::put('/updatedatasekolah/{sekolah}', [AdminController::class , 'updateDataSekolah'])->name('updateDataSekolah');
+        Route::delete('/deletedatasekolah/{sekolah}', [AdminController::class , 'deleteDataSekolah'])->name('deleteDataSekolah');
         
-        Route::get('/dataguru', [AdminController::class, 'dataGuru'])->name('dataGuru');
+        Route::get('/guru', [AdminController::class, 'dataGuru'])->name('dataGuru');
+        Route::get('/dataguru', [AdminController::class , 'getDatatableGuru'])->name('getDatatableGuru');
         Route::get('/tambahdataguru', [AdminController::class, 'tambahDataGuru'])->name('tambahDataGuru');
-        Route::get('/editdataguru', [AdminController::class, 'editDataGuru'])->name('editDataGuru');
+        Route::post('/storedataguru', [AdminController::class , 'storeDataGuru'])->name('storeDataGuru');
+        Route::get('/editdataguru/{guru}', [AdminController::class, 'editDataGuru'])->name('editDataGuru');
+        Route::put('/updatedataguru/{guru}', [AdminController::class , 'updateDataGuru'])->name('updateDataGuru');
+        Route::delete('/deletedataguru/{guru}', [AdminController::class , 'deleteDataGuru'])->name('deleteDataGuru'); 
         
-        Route::get('/datainfo', [AdminController::class, 'dataInfo'])->name('dataInfo');
+        Route::get('/info', [AdminController::class, 'dataInfo'])->name('dataInfo');
+        Route::get('/datainfo', [AdminController::class, 'getDatatableInfo'])->name('getDatatableInfo');
         Route::get('/tambahdatainfo', [AdminController::class, 'tambahDataInfo'])->name('tambahDataInfo');
-        Route::get('/editdatainfo', [AdminController::class, 'editDataInfo'])->name('editDataInfo');
+        Route::post('/storedatainfo', [AdminController::class , 'storeDataInfo'])->name('storeDataInfo');
+        Route::get('/editdatainfo/{info}', [AdminController::class, 'editDataInfo'])->name('editDataInfo');
+        Route::put('/updatedatainfo/{info}', [AdminController::class , 'updateDataInfo'])->name('updateDataInfo');
+        Route::delete('/deletedatainfo/{info}', [AdminController::class , 'deleteDataInfo'])->name('deleteDataInfo');
         
         Route::prefix('')->middleware('role:superadmin')->group(function () {
             Route::get('/pengguna', [AdminController::class, 'dataPengguna'])->name('dataPengguna');
-            Route::get('/datapengguna', [AdminController::class , 'getDatatable'])->name('getDatatablePengguna');
+            Route::get('/datapengguna', [AdminController::class , 'getDatatablePengguna'])->name('getDatatablePengguna');
             Route::get('/tambahdatapengguna', [AdminController::class, 'tambahDataPengguna'])->name('tambahDataPengguna');
             Route::post('/storedatapengguna', [AdminController::class , 'storeDataPengguna'])->name('storeDataPengguna');
             Route::get('/editdatapengguna/{user}', [AdminController::class, 'editDataPengguna'])->name('editDataPengguna');
             Route::put('/updatedatapengguna/{user}', [AdminController::class , 'updateDataPengguna'])->name('updateDataPengguna');
             Route::delete('/deletedatapengguna/{user}', [AdminController::class , 'deleteDataPengguna'])->name('deleteDataPengguna'); 
             
-            Route::get('/datasekolah-s', [AdminController::class, 'dataSekolahSuperadmin'])->name('dataSekolahSuperadmin');
+            Route::get('/sekolah-s', [AdminController::class, 'dataSekolahSuperadmin'])->name('dataSekolahSuperadmin');
+            Route::get('/datasekolah-s', [AdminController::class , 'getDatatableSekolahSuperadmin'])->name('getDatatableSekolahSuperadmin');
         });
     }); 
 }); 

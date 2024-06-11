@@ -48,14 +48,14 @@
               </a>
             </li>
             <li class="nav-item mb-3">
-              <a class="nav-link {{ request()->is('datasekolah-s','tambahdatasekolah','editdatasekolah') ? 'active' : '' }}" href="{{ route('dataSekolahSuperadmin') }}">
+              <a class="nav-link {{ request()->is('sekolah-s','datasekolah-s','tambahdatasekolah','editdatasekolah', 'editdatasekolah/*') ? 'active' : '' }}" href="{{ route('dataSekolahSuperadmin') }}">
                 <i class="bi bi-bank me-3"></i>
                 Data Sekolah
               </a>
             </li>
           @else
           <li class="nav-item mb-3">
-            <a class="nav-link {{ request()->is('datasekolah','tambahdatasekolah','editdatasekolah') ? 'active' : '' }}" href="{{ route('dataSekolah') }}">
+            <a class="nav-link {{ request()->is('datasekolah','tambahdatasekolah','editdatasekolah', 'editdatasekolah/*') ? 'active' : '' }}" href="{{ route('dataSekolah') }}">
               <i class="bi bi-bank me-3"></i>
               Data Sekolah
             </a>
@@ -63,13 +63,13 @@
           @endif
 
           <li class="nav-item mb-3">
-            <a class="nav-link {{ request()->is('dataguru','tambahdataguru','editdataguru') ? 'active' : '' }}" href="{{ route('dataGuru') }}">
+            <a class="nav-link {{ request()->is('guru','dataguru','tambahdataguru','editdataguru', 'editdataguru/*') ? 'active' : '' }}" href="{{ route('dataGuru') }}">
                 <i class="bi bi-pass me-3"></i>
               Data guru
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {{ request()->is('datainfo','tambahdatainfo','editdatainfo') ? 'active' : '' }}" href="{{ route('dataInfo')}}">
+            <a class="nav-link {{ request()->is('info','datainfo','tambahdatainfo','editdatainfo', 'editdatainfo/*') ? 'active' : '' }}" href="{{ route('dataInfo')}}">
               <i class="bi bi-clipboard-data me-3"></i></i>
               Info Terkini
             </a>

@@ -89,13 +89,32 @@
                     url: '{{ route('getDatatablePengguna') }}',
                     type: "GET",
                 },
-                columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                    { data: 'name', name: 'name' },
-                    { data: 'nama_sekolah', name: 'nama_sekolah' },
-                    { data: 'email', name: 'email' },
-                    { data: 'no_telepon', name: 'no_telepon' },
-                    { data: 'role', name: 'role' },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'nama_sekolah',
+                        name: 'nama_sekolah'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'no_telepon',
+                        name: 'no_telepon'
+                    },
+                    {
+                        data: 'role',
+                        name: 'role'
+                    },
                     {
                         data: 'action',
                         name: 'action',
@@ -117,9 +136,9 @@
                 table.column(1).search(value).draw();
             });
 
-            $('#exampleModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget); 
-                var userId = button.data('user-id'); 
+            $('#exampleModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var userId = button.data('user-id');
                 var modal = $(this);
                 var actionUrl = "{{ route('deleteDataPengguna', ['user' => ':id']) }}".replace(':id', userId);
                 modal.find('#deleteForm').attr('action', actionUrl);
