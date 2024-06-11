@@ -61,13 +61,21 @@ Route::prefix('')->middleware('authenticate')->group(function () {
             Route::put('/updatedatapengguna/{user}', [SuperadminController::class , 'updateDataPengguna'])->name('updateDataPengguna');
             Route::delete('/deletedatapengguna/{user}', [SuperadminController::class , 'deleteDataPengguna'])->name('deleteDataPengguna'); 
             
-            Route::get('/sekolah-s', [SuperadminController::class, 'dataSekolahSuperadmin'])->name('dataSekolahSuperadmin');
+            Route::get('/sekolah-s', [SuperadminController::class, 'dataSekolah'])->name('dataSekolahSuperadmin');
             Route::get('/datasekolah-s', [SuperadminController::class , 'getDatatableSekolah'])->name('getDatatableSekolah');
-            Route::get('/tambahdatasekolah-s', [SuperadminController::class, 'tambahDataSekolahSuperadmin'])->name('tambahDataSekolahSuperadmin');
-            Route::post('/storedatasekolah-s', [SuperadminController::class , 'storeDataSekolahSuperadmin'])->name('storeDataSekolahSuperadmin');
-            Route::get('/editdatasekolah-s/{sekolah}', [SuperadminController::class, 'editDataSekolahSuperadmin'])->name('editDataSekolahSuperadmin');
-            Route::put('/updatedatasekolah-s/{sekolah}', [SuperadminController::class , 'updateDataSekolahSuperadmin'])->name('updateDataSekolahSuperadmin');
-            Route::delete('/deletedatasekolah-s/{sekolah}', [SuperadminController::class , 'deleteDataSekolahSuperadmin'])->name('deleteDataSekolahSuperadmin');
+            Route::get('/tambahdatasekolah-s', [SuperadminController::class, 'tambahDataSekolah'])->name('tambahDataSekolahSuperadmin');
+            Route::post('/storedatasekolah-s', [SuperadminController::class , 'storeDataSekolah'])->name('storeDataSekolahSuperadmin');
+            Route::get('/editdatasekolah-s/{sekolah}', [SuperadminController::class, 'editDataSekolah'])->name('editDataSekolahSuperadmin');
+            Route::put('/updatedatasekolah-s/{sekolah}', [SuperadminController::class , 'updateDataSekolah'])->name('updateDataSekolahSuperadmin');
+            Route::delete('/deletedatasekolah-s/{sekolah}', [SuperadminController::class , 'deleteDataSekolah'])->name('deleteDataSekolahSuperadmin');
+
+            Route::get('/guru-s', [SuperadminController::class, 'dataGuru'])->name('dataGuruSuperadmin');
+            Route::get('/dataguru-s', [SuperadminController::class , 'getDatatableGuru'])->name('getDatatableGuruSuperadmin');
+            Route::get('/tambahdataguru-s', [SuperadminController::class, 'tambahDataGuru'])->name('tambahDataGuruSuperadmin');
+            Route::post('/storedataguru-s', [SuperadminController::class , 'storeDataGuru'])->name('storeDataGuruSuperadmin');
+            Route::get('/editdataguru-s/{guru}', [SuperadminController::class, 'editDataGuru'])->name('editDataGuruSuperadmin');
+            Route::put('/updatedataguru-s/{guru}', [SuperadminController::class , 'updateDataGuru'])->name('updateDataGuruSuperadmin');
+            Route::delete('/deletedataguru-s/{guru}', [SuperadminController::class , 'deleteDataGuru'])->name('deleteDataGuruSuperadmin'); 
         });
     }); 
 }); 

@@ -6,7 +6,7 @@
     <div class="container-fluid z-0">
         <div class="row">
             <div class="col-lg-9 col-md-8 offset-lg-2 offset-md-3 ml-sm-auto col-lg-10 px-md-4 py-4">
-                <h2 class="fw-medium h2"><u>Edit Data Sekolah</u></h2>
+                <h2 class="fw-medium h2"><u>Edit Data Sekolah (Superadmin)</u></h2>
             </div>
             <div class="col-lg-9 offset-lg-3 col-md-8 offset-md-4 d-flex mt-4 mb-2">
                 <form action="{{ route('updateDataSekolahSuperadmin', ['sekolah' => $sekolah->id]) }}" id="sekolahForm" method="post" class="w-75" enctype="multipart/form-data">
