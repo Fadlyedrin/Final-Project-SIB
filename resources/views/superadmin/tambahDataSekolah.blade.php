@@ -6,10 +6,10 @@
     <div class="container-fluid z-0">
         <div class="row">
             <div class="col-lg-9 col-md-8 offset-lg-2 offset-md-3 ml-sm-auto col-lg-10 px-md-4 py-4">
-                <h2 class="fw-medium h2"><u>Tambah Data Sekolah</u></h2>
+                <h2 class="fw-medium h2"><u>Tambah Data Sekolah (Superadmin)</u></h2>
             </div>
             <div class="col-lg-9 offset-lg-3 col-md-8 offset-md-4 d-flex mt-4 mb-2">
-                <form action="{{ route('storeDataSekolah') }}" id="sekolahForm" method="post" class="w-75" enctype="multipart/form-data">
+                <form action="{{ route('storeDataSekolahSuperadmin') }}" id="sekolahForm" method="post" class="w-75" enctype="multipart/form-data">
                     @csrf
                     <div class="image-form d-flex gap-3">
                         <div>
@@ -124,6 +124,19 @@
                                 <b>{{ $errors->first('lokasi') }}</b>
                             </div>
                         @endif
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="admin" class="form-label">Admin</label>
+                        <select name="admin" class="form-select border border-dark" required>
+                            <option value="0" {{ old('admin') == '0' ? 'selected' : '' }}>Pilih Admin</option>
+                            @foreach ($admins as $admin)
+                                <option value="{{ $admin->id }}">{{ $admin->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('admin')
+                            <div class="text-danger mt-2">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="d-flex justify-content-end my-4">

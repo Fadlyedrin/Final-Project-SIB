@@ -6,10 +6,10 @@
     <div class="container-fluid z-0">
         <div class="row">
             <div class="col-lg-9 col-md-8 offset-lg-2 offset-md-3 ml-sm-auto col-lg-10 px-md-4 py-4">
-                <h2 class="fw-medium h2"><u>Tambah Info Terkini</u></h2>
+                <h2 class="fw-medium h2"><u>Tambah Info Terkini (Superadmin)</u></h2>
             </div>
             <div class="col-lg-9 offset-lg-3 col-md-8 offset-md-4 d-flex mt-4 mb-2">
-                <form action="{{ route('storeDataInfo') }}" id="infoForm" method="post" class="w-75" enctype="multipart/form-data">
+                <form action="{{ route('storeDataInfoSuperadmin') }}" id="infoForm" method="post" class="w-75" enctype="multipart/form-data">
                     @csrf
                     <div>
                         <label for="selectedImage3" class="form-label">Image</label>
@@ -23,6 +23,19 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mb-3 mt-3">
+                        <label for="sekolah" class="form-label">Sekolah</label>
+                        <select name="sekolah" class="form-select border border-dark" required>
+                            <option value="0" {{ old('sekolah') == '0' ? 'selected' : '' }}>Pilih SMA</option>
+                            @foreach ($sekolahs as $sekolah)
+                                <option value="{{ $sekolah->id }}">{{ $sekolah->nama }}</option>
+                            @endforeach
+                        </select>
+                        @error('sekolah')
+                            <div class="text-danger mt-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="mb-3 mt-3">
                         <label for="kategori" class="form-label">Kategori</label>
                         <select name="kategori" class="form-select border border-dark" required>

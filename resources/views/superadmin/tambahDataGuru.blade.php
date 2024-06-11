@@ -6,10 +6,10 @@
     <div class="container-fluid z-0">
         <div class="row">
             <div class="col-lg-9 col-md-8 offset-lg-2 offset-md-3 ml-sm-auto col-lg-10 px-md-4 py-4">
-                <h2 class="fw-medium h2"><u>Tambah Data Guru</u></h2>
+                <h2 class="fw-medium h2"><u>Tambah Data Guru (Superadmin)</u></h2>
             </div>
             <div class="col-lg-9 offset-lg-3 col-md-8 offset-md-4 d-flex mt-4 mb-2">
-                <form action="{{ route('storeDataGuru') }}" id="guruForm" method="post" class="w-75" enctype="multipart/form-data">
+                <form action="{{ route('storeDataGuruSuperadmin') }}" id="guruForm" method="post" class="w-75" enctype="multipart/form-data">
                     @csrf
                     <div>
                         <label for="selectedImage3" class="form-label">Foto</label>
@@ -19,7 +19,7 @@
                         <div class="d-flex">
                             <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
                                 <label class="form-label text-white m-1" for="customFile3">Choose file</label>
-                                <input type="file" class="form-control d-none {{ $errors->has('gambar') ? 'is-invalid' : '' }}" name="gambar" id="customFile3"
+                                <input type="file" class="form-control d-none {{ $errors->has('logo') ? 'is-invalid' : '' }}" name="gambar" id="customFile3"
                                     onchange="displaySelectedImage(event, 'selectedImage3')" />
                             </div>
                         </div>
@@ -83,6 +83,19 @@
                                 <b>{{ $errors->first('jabatan') }}</b>
                             </div>
                         @endif
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sekolah" class="form-label">Sekolah</label>
+                        <select name="sekolah" class="form-select border border-dark" required>
+                            <option value="0" {{ old('sekolah') == '0' ? 'selected' : '' }}>Pilih SMA</option>
+                            @foreach ($sekolahs as $sekolah)
+                                <option value="{{ $sekolah->id }}">{{ $sekolah->nama }}</option>
+                            @endforeach
+                        </select>
+                        @error('sekolah')
+                            <div class="text-danger mt-2">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="d-flex justify-content-end my-4">

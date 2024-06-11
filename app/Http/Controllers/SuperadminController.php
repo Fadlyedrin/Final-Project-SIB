@@ -19,23 +19,126 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
-class AdminController extends Controller
+class SuperadminController extends Controller
 {
-    public function index() 
+    //Kelola data pengguna
+    public function dataPengguna(Request $request, User $user)
     {
-        return view('admin.index');
+        return view('superadmin.dataPengguna', compact('user'));
     }
 
-    //Kelola data sekolah admin
-    public function dataSekolah(Request $request, Sekolah $sekolah)
+    public function getDatatablePengguna(Request $request)
     {
-        return view('admin.dataSekolah', compact('sekolah'));
+        $users = User::with(['sekolah', 'roles'])->get();
+        
+        return DataTables::of($users)
+            ->addIndexColumn()
+            ->addColumn('nama_sekolah', function ($user) {
+                return $user->sekolah ? $user->sekolah->nama : '-';
+            })
+            ->addColumn('role', function ($user) {
+                return $user->roles->first() ? $user->roles->first()->name : '-';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
     
+    public function tambahDataPengguna() 
+    {
+        return view('superadmin.tambahDataPengguna');
+    }
+    public function storeDataPengguna(UserCreateRequest $request) 
+    {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'no_telepon' => $request->no_telepon, 
+        ]);
+
+        $roleName = $request->role == 'superadmin' ? 'superadmin' : 'admin';
+        $role = Role::where('name', $roleName)->first();
+
+        if ($role) {
+            $user->assignRole($role);
+        }
+
+        return redirect()->route('dataPengguna')->with('success', 'Data Admin Berhasil dibuat.');
+    }
+
+    public function editDataPengguna(User $user) 
+    {
+        return view('superadmin.editDataPengguna', compact('user'));
+    }
+    
+    public function updateDataPengguna(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => $request->email != $user->email ? 'required|email|unique:user,email' : 'required|email',
+            'role' => 'required|not_in:0',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('editDataPengguna', ['user' => $user->id])
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->no_telepon = $request->no_telepon;
+        
+        $roleName = $request->role == 'superadmin' ? 'superadmin' : 'admin';
+        $role = Role::where('name', $roleName)->first();
+
+        if ($role) {
+            $user->assignRole($role);
+        }
+        
+        $user->save();
+            
+        return redirect()->route('dataPengguna')
+        ->with('success', 'Data Admin Berhasil diubah.');
+    }
+
+    public function deleteDataPengguna(Request $request, User $user)
+    {
+        if (Auth::id() == $user->id) {
+            return redirect()->back()->with('delete_error', 'You cannot delete yourself');
+        }
+
+        $user->delete();
+        return redirect()->route('dataPengguna')->with('success', 'Data Admin berhasil dihapus.');
+    }
+    
+    //Kelola data sekolah superadmin
+    public function dataSekolah(Request $request, Sekolah $sekolah)
+    {
+        return view('superadmin.dataSekolah', compact('sekolah'));
+    }
+    
+    public function getDatatableSekolah(Request $request)
+    {
+        $sekolah = Sekolah::with(['user'])->get();
+        
+        return DataTables::of($sekolah)
+            ->addIndexColumn()
+            ->addColumn('nama_user', function ($sekolah) {
+                return $sekolah->user ? $sekolah->user->name : '-';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
     public function tambahDataSekolah() 
     {
-        return view('admin.tambahDataSekolah');
+        $adminRole = Role::where('name', 'admin')->first();
+        $admins = $adminRole->users()->whereDoesntHave('sekolah')->get();
+
+        return view('superadmin.tambahDataSekolah', compact('admins'));
     }
+    
     public function storeDataSekolah(SekolahCreateRequest $request) 
     {
         $file1 = $request->file('logo');
@@ -43,7 +146,7 @@ class AdminController extends Controller
         $file1->move('storage/logo_sekolah', $fileName);
 
         $sekolah = Sekolah::create([
-            'id_user' => Auth::user()->id,
+            'id_user' => $request->admin,
             'nama' => $request->nama,
             'alamat' => $request->alamat,
             'no_telepon' => $request->no_telepon,
@@ -59,7 +162,7 @@ class AdminController extends Controller
             foreach ($request->file('gambar_sekolah') as $file) {
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $file->move('storage/gambar_sekolah', $fileName);
-    
+
                 GambarSekolah::create([
                     'id_sekolah' => $sekolah->id,
                     'gambar' => '/storage/gambar_sekolah/' . $fileName,
@@ -67,12 +170,12 @@ class AdminController extends Controller
             }
         }
 
-        return redirect()->route('dataSekolah')->with('success', 'Data Sekolah Berhasil dibuat.');
+        return redirect()->route('dataSekolahSuperadmin')->with('success', 'Data Sekolah Berhasil dibuat.');
     }
 
     public function editDataSekolah(Sekolah $sekolah) 
     {
-        return view('admin.editDataSekolah', compact('sekolah'));
+        return view('superadmin.editDataSekolah', compact('sekolah'));
     }
     
     public function updateDataSekolah(Request $request, Sekolah $sekolah)
@@ -133,7 +236,7 @@ class AdminController extends Controller
 
         $sekolah->save();
             
-        return redirect()->route('dataSekolah')
+        return redirect()->route('dataSekolahSuperadmin')
             ->with('success', 'Data Sekolah Berhasil diubah.');
     }
     
@@ -152,26 +255,17 @@ class AdminController extends Controller
         }
         
         $sekolah->delete();
-        return redirect()->route('dataSekolah')->with('success', 'Data Sekolah berhasil dihapus.');
+        return redirect()->route('dataSekolahSuperadmin')->with('success', 'Data Sekolah berhasil dihapus.');
     }
-    
     //Kelola data guru admin
     public function dataGuru(Request $request, Guru $guru)
     {
-        return view('admin.dataGuru', compact('guru'));
+        return view('superadmin.dataGuru', compact('guru'));
     }
     
     public function getDatatableGuru(Request $request)
     {
-        $user = Auth::user();
-    
-        $sekolahId = $user->sekolah ? $user->sekolah->id : null;
-
-        if (!$sekolahId) {
-            return DataTables::of(collect())->make(true);
-        }
-
-        $guru = Guru::where('id_sekolah', $sekolahId)->with('sekolah')->get();
+        $guru = Guru::with(['sekolah'])->get();
         
         return DataTables::of($guru)
             ->addIndexColumn()
@@ -184,20 +278,20 @@ class AdminController extends Controller
 
     public function tambahDataGuru() 
     {
-        return view('admin.tambahDataGuru');
+        $sekolahs = Sekolah::all();
+        return view('superadmin.tambahDataGuru', compact('sekolahs'));
     }
     
     public function storeDataGuru(GuruCreateRequest $request) 
     {
-        $user = Auth::user();
-        $sekolah = $user->sekolah;
+        $idSekolah = $request->sekolah;
     
         $file1 = $request->file('gambar');
         $fileName = time() . '_' . $file1->getClientOriginalName();
         $file1->move('storage/gambar_guru', $fileName);
 
         Guru::create([
-            'id_sekolah' => $sekolah->id,
+            'id_sekolah' => $idSekolah,
             'nama' => $request->nama,
             'pendidikan' => $request->pendidikan,
             'kategori_kepegawaian' => $request->kategori_kepegawaian,
@@ -206,12 +300,13 @@ class AdminController extends Controller
             'gambar' => '/storage/gambar_guru/' . $fileName,
         ]);
 
-        return redirect()->route('dataGuru')->with('success', 'Data Guru Berhasil dibuat.');
+        return redirect()->route('dataGuruSuperadmin')->with('success', 'Data Guru Berhasil dibuat.');
     }
 
     public function editDataGuru(Guru $guru) 
     {
-        return view('admin.editDataGuru', compact('guru'));
+        $sekolahs = Sekolah::all();
+        return view('superadmin.editDataGuru', compact('guru', 'sekolahs'));
     }
     
     public function updateDataGuru(Request $request, Guru $guru)
@@ -225,7 +320,7 @@ class AdminController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('editDataGuru', ['guru' => $guru->id])
+            return redirect()->route('editDataGuruSuperadmin', ['guru' => $guru->id])
                 ->withErrors($validator)
                 ->withInput(); 
         }
@@ -235,6 +330,7 @@ class AdminController extends Controller
         $guru->kategori_kepegawaian = $request->kategori_kepegawaian;
         $guru->status = $request->status;
         $guru->jabatan = $request->jabatan;
+        $guru->id_sekolah = $request->sekolah;
 
         if ($request->hasFile('gambar')) {
             $imagePath = public_path($guru->gambar);
@@ -250,7 +346,7 @@ class AdminController extends Controller
 
         $guru->save();
             
-        return redirect()->route('dataGuru')
+        return redirect()->route('dataGuruSuperadmin')
             ->with('success', 'Data Guru Berhasil diubah.');
     }
     
@@ -261,26 +357,18 @@ class AdminController extends Controller
             unlink($imagePath);
         
         $guru->delete();
-        return redirect()->route('dataGuru')->with('success', 'Data Guru berhasil dihapus.');
+        return redirect()->route('dataGuruSuperadmin')->with('success', 'Data Guru berhasil dihapus.');
     }
 
     //Kelola data info admin
     public function dataInfo(Request $request, Info $info)
     {
-        return view('admin.dataInfo', compact('info'));
+        return view('superadmin.dataInfo', compact('info'));
     }
     
     public function getDatatableInfo(Request $request)
     {
-        $user = Auth::user();
-    
-        $sekolahId = $user->sekolah ? $user->sekolah->id : null;
-
-        if (!$sekolahId) {
-            return DataTables::of(collect())->make(true);
-        }
-
-        $info = Info::where('id_sekolah', $sekolahId)->with('sekolah');
+        $info = Info::with(['sekolah']);
 
         if ($request->filled('kategori')) {
             $info->where('kategori', $request->kategori);
@@ -297,16 +385,16 @@ class AdminController extends Controller
 
     public function tambahDataInfo() 
     {
-        return view('admin.tambahInfoTerkini');
+        $sekolahs = Sekolah::all();
+        return view('superadmin.tambahInfoTerkini', compact('sekolahs'));
     }
     
     public function storeDataInfo(InfoCreateRequest $request) 
     {
-        $user = Auth::user();
-        $sekolah = $user->sekolah;
+        $idSekolah = $request->sekolah;
 
         $info = Info::create([
-            'id_sekolah' => $sekolah->id,
+            'id_sekolah' => $idSekolah,
             'judul' => $request->judul,
             'deskripsi' => $request->deskripsi,
             'kategori' => $request->kategori,
@@ -324,12 +412,13 @@ class AdminController extends Controller
             }
         }
 
-        return redirect()->route('dataInfo')->with('success', 'Data Info Berhasil dibuat.');
+        return redirect()->route('dataInfoSuperadmin')->with('success', 'Data Info Berhasil dibuat.');
     }
 
     public function editDataInfo(Info $info) 
     {
-        return view('admin.editInfoTerkini', compact('info'));
+        $sekolahs = Sekolah::all();
+        return view('superadmin.editInfoTerkini', compact('info', 'sekolahs'));
     }
     
     public function updateDataInfo(Request $request, Info $info)
@@ -341,7 +430,7 @@ class AdminController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('editDataInfo', ['info' => $info->id])
+            return redirect()->route('editDataInfoSuperadmin', ['info' => $info->id])
                 ->withErrors($validator)
                 ->withInput(); 
         }
@@ -349,6 +438,7 @@ class AdminController extends Controller
         $info->judul = $request->judul;
         $info->deskripsi = $request->deskripsi;
         $info->kategori = $request->kategori;
+        $info->id_sekolah = $request->sekolah;
 
         if ($request->hasFile('gambar_info')) {
             foreach ($request->file('gambar_info') as $file) {
@@ -367,7 +457,7 @@ class AdminController extends Controller
         
         $info->save();
             
-        return redirect()->route('dataInfo')
+        return redirect()->route('dataInfoSuperadmin')
             ->with('success', 'Data Info Berhasil diubah.');
     }
     
@@ -382,6 +472,6 @@ class AdminController extends Controller
         }
         
         $info->delete();
-        return redirect()->route('dataInfo')->with('success', 'Data Info berhasil dihapus.');
+        return redirect()->route('dataInfoSuperadmin')->with('success', 'Data Info berhasil dihapus.');
     }
 }
