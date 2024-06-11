@@ -363,21 +363,12 @@ class SuperadminController extends Controller
     //Kelola data info admin
     public function dataInfo(Request $request, Info $info)
     {
-        return view('admin.dataInfo', compact('info'));
+        return view('superadmin.dataInfo', compact('info'));
     }
     
     public function getDatatableInfo(Request $request)
     {
-        $user = Auth::user();
-    
-        $sekolahId = $user->sekolah ? $user->sekolah->id : null;
-
-        if (!$sekolahId) {
-            return DataTables::of(collect())->make(true);
-        }
-
-        // $info = Info::where('id_sekolah', $sekolahId)->with('sekolah')->get();
-        $info = Info::all();
+        $info = Info::with(['sekolah']);
 
         if ($request->filled('kategori')) {
             $info->where('kategori', $request->kategori);
@@ -394,16 +385,16 @@ class SuperadminController extends Controller
 
     public function tambahDataInfo() 
     {
-        return view('admin.tambahInfoTerkini');
+        $sekolahs = Sekolah::all();
+        return view('superadmin.tambahInfoTerkini', compact('sekolahs'));
     }
     
     public function storeDataInfo(InfoCreateRequest $request) 
     {
-        $user = Auth::user();
-        $sekolah = $user->sekolah;
+        $idSekolah = $request->sekolah;
 
         $info = Info::create([
-            'id_sekolah' => $sekolah->id,
+            'id_sekolah' => $idSekolah,
             'judul' => $request->judul,
             'deskripsi' => $request->deskripsi,
             'kategori' => $request->kategori,
@@ -421,12 +412,13 @@ class SuperadminController extends Controller
             }
         }
 
-        return redirect()->route('dataInfo')->with('success', 'Data Info Berhasil dibuat.');
+        return redirect()->route('dataInfoSuperadmin')->with('success', 'Data Info Berhasil dibuat.');
     }
 
     public function editDataInfo(Info $info) 
     {
-        return view('admin.editInfoTerkini', compact('info'));
+        $sekolahs = Sekolah::all();
+        return view('superadmin.editInfoTerkini', compact('info', 'sekolahs'));
     }
     
     public function updateDataInfo(Request $request, Info $info)
@@ -438,7 +430,7 @@ class SuperadminController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('editDataInfo', ['info' => $info->id])
+            return redirect()->route('editDataInfoSuperadmin', ['info' => $info->id])
                 ->withErrors($validator)
                 ->withInput(); 
         }
@@ -446,6 +438,7 @@ class SuperadminController extends Controller
         $info->judul = $request->judul;
         $info->deskripsi = $request->deskripsi;
         $info->kategori = $request->kategori;
+        $info->id_sekolah = $request->sekolah;
 
         if ($request->hasFile('gambar_info')) {
             foreach ($request->file('gambar_info') as $file) {
@@ -464,7 +457,7 @@ class SuperadminController extends Controller
         
         $info->save();
             
-        return redirect()->route('dataInfo')
+        return redirect()->route('dataInfoSuperadmin')
             ->with('success', 'Data Info Berhasil diubah.');
     }
     
@@ -479,6 +472,6 @@ class SuperadminController extends Controller
         }
         
         $info->delete();
-        return redirect()->route('dataInfo')->with('success', 'Data Info berhasil dihapus.');
+        return redirect()->route('dataInfoSuperadmin')->with('success', 'Data Info berhasil dihapus.');
     }
 }

@@ -59,6 +59,12 @@
                 Data guru
               </a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link {{ request()->is('info-s','datainfo-s','tambahdatainfo-s','editdatainfo-s', 'editdatainfo-s/*') ? 'active' : '' }}" href="{{ route('dataInfoSuperadmin')}}">
+                <i class="bi bi-clipboard-data me-3"></i></i>
+                Info Terkini
+              </a>
+            </li>
           @else
           <li class="nav-item mb-3">
             <a class="nav-link {{ request()->is('datasekolah','tambahdatasekolah','editdatasekolah', 'editdatasekolah/*') ? 'active' : '' }}" href="{{ route('dataSekolah') }}">
@@ -72,15 +78,13 @@
               Data guru
             </a>
           </li>
-          @endif
-
           <li class="nav-item">
             <a class="nav-link {{ request()->is('info','datainfo','tambahdatainfo','editdatainfo', 'editdatainfo/*') ? 'active' : '' }}" href="{{ route('dataInfo')}}">
               <i class="bi bi-clipboard-data me-3"></i></i>
               Info Terkini
             </a>
           </li>
-
+          @endif
         </ul>
       </div>
     </nav>

@@ -91,7 +91,7 @@
                         <select name="sekolah" class="form-select border border-dark" required>
                             <option value="0">Pilih SMA</option>
                             @foreach ($sekolahs as $sekolah)
-                            <option value="{{ $sekolah->id }}" {{ old('sekolah', $guru->id_sekolah) == $sekolah->id ? 'selected' : '' }}>{{ $sekolah->nama }}</option>
+                                <option value="{{ $sekolah->id }}" {{ old('sekolah', $guru->id_sekolah) == $sekolah->id ? 'selected' : '' }}>{{ $sekolah->nama }}</option>
                             @endforeach
                         </select>
                         @error('sekolah')

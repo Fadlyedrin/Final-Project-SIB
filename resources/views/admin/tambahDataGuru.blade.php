@@ -19,7 +19,7 @@
                         <div class="d-flex">
                             <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
                                 <label class="form-label text-white m-1" for="customFile3">Choose file</label>
-                                <input type="file" class="form-control d-none {{ $errors->has('logo') ? 'is-invalid' : '' }}" name="gambar" id="customFile3"
+                                <input type="file" class="form-control d-none {{ $errors->has('gambar') ? 'is-invalid' : '' }}" name="gambar" id="customFile3"
                                     onchange="displaySelectedImage(event, 'selectedImage3')" />
                             </div>
                         </div>

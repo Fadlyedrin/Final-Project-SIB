@@ -14,14 +14,15 @@
                     @method('PUT')
                     @csrf
                     <div>
-                        <label for="selectedImage3" class="form-label">Logo</label>
+                        <label for="selectedImage3" class="form-label">Foto</label>
                         <div class="mb-4 d-flex">
                             <img id="selectedImage3" src="{{ asset('assets/inputfoto.png') }}" alt="gambar guru" style="width: 300px" />
                         </div>
                         <div class="d-flex">
                             <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
                                 <label class="form-label text-white m-1" for="customFile3">Choose file</label>
-                                <input type="file" class="form-control d-none" id="customFile3" onchange="displaySelectedImage(event, 'selectedImage3')" />
+                                <input type="file" class="form-control d-none {{ $errors->has('gambar') ? 'is-invalid' : '' }}" name="gambar" id="customFile3"
+                                    onchange="displaySelectedImage(event, 'selectedImage3')" />
                             </div>
                         </div>
                     </div>

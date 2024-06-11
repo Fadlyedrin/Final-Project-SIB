@@ -76,6 +76,14 @@ Route::prefix('')->middleware('authenticate')->group(function () {
             Route::get('/editdataguru-s/{guru}', [SuperadminController::class, 'editDataGuru'])->name('editDataGuruSuperadmin');
             Route::put('/updatedataguru-s/{guru}', [SuperadminController::class , 'updateDataGuru'])->name('updateDataGuruSuperadmin');
             Route::delete('/deletedataguru-s/{guru}', [SuperadminController::class , 'deleteDataGuru'])->name('deleteDataGuruSuperadmin'); 
+
+            Route::get('/info-s', [SuperadminController::class, 'dataInfo'])->name('dataInfoSuperadmin');
+            Route::get('/datainfo-s', [SuperadminController::class, 'getDatatableInfo'])->name('getDatatableInfoSuperadmin');
+            Route::get('/tambahdatainfo-s', [SuperadminController::class, 'tambahDataInfo'])->name('tambahDataInfoSuperadmin');
+            Route::post('/storedatainfo-s', [SuperadminController::class , 'storeDataInfo'])->name('storeDataInfoSuperadmin');
+            Route::get('/editdatainfo-s/{info}', [SuperadminController::class, 'editDataInfo'])->name('editDataInfoSuperadmin');
+            Route::put('/updatedatainfo-s/{info}', [SuperadminController::class , 'updateDataInfo'])->name('updateDataInfoSuperadmin');
+            Route::delete('/deletedatainfo-s/{info}', [SuperadminController::class , 'deleteDataInfo'])->name('deleteDataInfoSuperadmin');
         });
     }); 
 }); 
