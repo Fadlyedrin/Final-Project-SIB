@@ -10,7 +10,7 @@
                 <h1 class="mb-4">Detail Prestasi</h1>
             </div>
             <div class="col-6 mt-5 ">
-                <img src="{{ asset($info->gambarInfo->first()->gambar) }}" class="object-fit-cover" width="635" height="570" alt="" />
+                <img src="{{ asset($info->gambarInfo->first()->gambar) }}" class="object-fit-cover" width="635" alt="" />
             </div>
             <div class="col-6 mt-5">
                 <h4 class="fw-bold">{{ $info->judul }}</h4>

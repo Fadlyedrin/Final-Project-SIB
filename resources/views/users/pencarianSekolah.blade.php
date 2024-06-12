@@ -25,11 +25,12 @@
                         <div class="col-8 offset-1 mt-4 w-100 d-flex p-2">
                             <div>
                                 <a href="{{ route('dashboardSekolah', ['sekolah' => $sekolah->id]) }}" class="my-4 mb-5 fw-bold text-dark text-decoration-none">{{ $sekolah->nama }}</a>
+                                <p>{{ $sekolah->created_at->diffForHumans() }}</p>
                                 <p class="my-3" style="width: 80%; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
                                     {{ $sekolah->deskripsi }}</p>
                             </div>
                             <div class="m-auto">
-                                <a href="{{ route('dashboardSekolah', ['sekolah' => $sekolah->id]) }}"><img src="{{ asset($sekolah->logo) }}" width="150" alt="" /></a>
+                                <a href="{{ route('dashboardSekolah', ['sekolah' => $sekolah->id]) }}"><img src="{{ asset($sekolah->logo) }}" class="object-fit-cover rounded" width="150" height="150" alt="" /></a>
                             </div>
                         </div>
                     @endforeach

@@ -25,11 +25,12 @@
                         <div class="col-8 offset-1 mt-4 w-100 d-flex p-2">
                             <div>
                                 <a href="{{ route('detailInfo', ['info' => $info->id]) }}" class="my-4 mb-5 fw-bold text-dark text-decoration-none">{{ $info->judul }}</a>
+                                <p>{{ $info->created_at->diffForHumans() }} | {{ $info->sekolah->nama }}</p>
                                 <p class="my-3" style="width: 80%; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
                                     {{ $info->deskripsi }}</p>
                             </div>
                             <div class="m-auto">
-                                <a href="{{ route('detailInfo', ['info' => $info->id]) }}"><img src="{{ $info->gambarInfo->first() ? asset($info->gambarInfo->first()->gambar) : asset('assets/gambar-info.png') }}" width="150" alt="gambar info" /></a>
+                                <a href="{{ route('detailInfo', ['info' => $info->id]) }}"><img src="{{ $info->gambarInfo->first() ? asset($info->gambarInfo->first()->gambar) : asset('assets/gambar-info.png') }}" class="object-fit-cover rounded" width="150" height="150" alt="gambar info" /></a>
                             </div>
                         </div>
                     @endforeach
