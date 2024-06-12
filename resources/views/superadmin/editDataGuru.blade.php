@@ -14,7 +14,7 @@
                     @method('PUT')
                     @csrf
                     <div>
-                        <label for="selectedImage3" class="form-label">Logo</label>
+                        <label for="selectedImage3" class="form-label">Foto</label>
                         <div class="mb-4 d-flex">
                             <img id="selectedImage3" src="{{ $guru->gambar ? asset($guru->gambar) : asset('assets/inputfoto.png') }}" alt="gambar guru" style="width: 300px" />
                         </div>

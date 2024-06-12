@@ -117,7 +117,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="lokasi" class="form-label">Lokasi</label>
+                        <label for="lokasi" class="form-label">Lokasi <span class="fw-normal">(Masukkan kode embed lokasi yang ada di google maps)</span></label>
                         <textarea class="form-control border border-dark {{ $errors->has('lokasi') ? 'is-invalid' : '' }}" placeholder="Masukkan kode embed lokasi sekolah" name="lokasi" id="lokasi" rows="1">{{ old('lokasi') }}</textarea>
                         @if ($errors->has('lokasi'))
                             <div class="invalid-feedback">

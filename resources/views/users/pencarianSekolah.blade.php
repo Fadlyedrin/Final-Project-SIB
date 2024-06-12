@@ -2,89 +2,40 @@
 @section('title', 'Pencarian Sekolah')
 
 @section('content')
-      <section id="hero" style="margin-top: 100px;">
+    <section id="hero" style="margin-top: 100px;">
         <div class="container">
-          <div class="row">
-            <div class="col-lg-8 offset-lg-2 text-center">
-              <div class="search-form">
-                <form role="search">
-                  <input
-                    class="form-control me-2"
-                    type="search"
-                    placeholder="Cari Sekolah ..."
-                    aria-label="Search"
-                  />
-                  <button href="#hero"><i class="bi bi-search"></i></button>
-                </form>
-              </div>
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2 text-center">
+                    <form action="{{ route('cariSekolah') }}" method="GET">
+                        <div class="search-form">
+                            <input class="form-control me-2" type="search" name="cari" placeholder="Cari Sekolah ..." aria-label="Search" />
+                            <button href="#hero"><i class="bi bi-search"></i></button>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </div>
         </div>
-      </section>
+    </section>
 
-      <section class="sekolah">
+    <section class="sekolah">
         <div class="container">
-          <div class="row mt-5">
-            <div class="col-9 offset-1">
-              <div class="col-8 offset-2 mt-4 w-100 d-flex p-2">
-                <div>
-                  <a href="{{ route('dashboardSekolah') }}" class="my-4 mb-5 fw-bold text-dark text-decoration-none">SMA 1</a>
-                  <p class="my-3 " style="width: 80%;">
-                    Deskripsi singkat. Lorem ipsum dolor sit amet consectetur.
-                    Ac dignissim sed volutpat sed sit est. Eleifend nam sed
-                    congue egestas morbi aliquam tristique. Nunc interdum sed
-                    scelerisque aliquam
-                  </p>
+            <div class="row mt-5">
+                <div class="col-9 offset-1">
+                    @foreach ($sekolahs as $sekolah)
+                        <div class="col-8 offset-1 mt-4 w-100 d-flex p-2">
+                            <div>
+                                <a href="{{ route('dashboardSekolah', ['sekolah' => $sekolah->id]) }}" class="my-4 mb-5 fw-bold text-dark text-decoration-none">{{ $sekolah->nama }}</a>
+                                <p class="my-3" style="width: 80%; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
+                                    {{ $sekolah->deskripsi }}</p>
+                            </div>
+                            <div class="m-auto">
+                                <a href="{{ route('dashboardSekolah', ['sekolah' => $sekolah->id]) }}"><img src="{{ asset($sekolah->logo) }}" width="150" alt="" /></a>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-                <div class="m-auto">
-                  <a href="{{ route('dashboardSekolah') }}"><img src="assets/gambar-info.png" width="150" alt="" /></a>
-                </div>
-              </div>
-              <div class="col-8 offset-2 mt-4 w-100 d-flex p-2">
-                <div>
-                  <a href="{{ route('dashboardSekolah') }}" class="my-4 mb-5 fw-bold text-dark text-decoration-none">SMA 1</a>
-                  <p class="my-3 " style="width: 80%;">
-                    Deskripsi singkat. Lorem ipsum dolor sit amet consectetur.
-                    Ac dignissim sed volutpat sed sit est. Eleifend nam sed
-                    congue egestas morbi aliquam tristique. Nunc interdum sed
-                    scelerisque aliquam
-                  </p>
-                </div>
-                <div class="m-auto">
-                  <a href="{{ route('dashboardSekolah') }}"><img src="assets/gambar-info.png" width="150" alt="" /></a>
-                </div>
-              </div>
-              <div class="col-8 offset-2 mt-4 w-100 d-flex p-2">
-                <div>
-                  <a href="{{ route('dashboardSekolah') }}" class="my-4 mb-5 fw-bold text-dark text-decoration-none">SMA 1</a>
-                  <p class="my-3 " style="width: 80%;">
-                    Deskripsi singkat. Lorem ipsum dolor sit amet consectetur.
-                    Ac dignissim sed volutpat sed sit est. Eleifend nam sed
-                    congue egestas morbi aliquam tristique. Nunc interdum sed
-                    scelerisque aliquam
-                  </p>
-                </div>
-                <div class="m-auto">
-                  <a href="{{ route('dashboardSekolah') }}"><img src="assets/gambar-info.png" width="150" alt="" /></a>
-                </div>
-              </div>
-              <div class="col-8 offset-2 mt-4 w-100 d-flex p-2">
-                <div>
-                  <a href="{{ route('dashboardSekolah') }}" class="my-4 mb-5 fw-bold text-dark text-decoration-none">SMA 1</a>
-                  <p class="my-3 " style="width: 80%;">
-                    Deskripsi singkat. Lorem ipsum dolor sit amet consectetur.
-                    Ac dignissim sed volutpat sed sit est. Eleifend nam sed
-                    congue egestas morbi aliquam tristique. Nunc interdum sed
-                    scelerisque aliquam
-                  </p>
-                </div>
-                <div class="m-auto">
-                  <a href="{{ route('dashboardSekolah') }}"><img src="assets/gambar-info.png" width="150" alt="" /></a>
-                </div>
-              </div>
             </div>
-          </div>
         </div>
-      </section>
+    </section>
 
 @endsection
