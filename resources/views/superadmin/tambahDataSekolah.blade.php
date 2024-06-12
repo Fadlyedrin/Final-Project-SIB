@@ -15,7 +15,7 @@
                         <div>
                             <label for="" class="form-label">Logo</label>
                             <div class="mb-4 d-flex justify-content-center">
-                                <img id="selectedImage" src="assets/inputfoto.png" alt="gambar sekolah" style="width: 300px" />
+                                <img id="selectedImage" src="{{asset('assets/inputfoto.png')}}" alt="gambar sekolah" style="width: 300px" />
                             </div>
                             <div class="d-flex justify-content-center">
                                 <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
@@ -28,7 +28,7 @@
                         <div>
                             <label for="" class="form-label">Foto Sekolah</label>
                             <div class="mb-4 d-flex justify-content-center">
-                                <img id="selectedImage2" src="assets/inputfoto.png" alt="gambar sekolah" style="width: 300px" />
+                                <img id="selectedImage2" src="{{asset('assets/inputfoto.png')}}" alt="gambar sekolah" style="width: 300px" />
                             </div>
                             <div class="d-flex justify-content-center">
                                 <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
@@ -117,7 +117,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="lokasi" class="form-label">Lokasi</label>
+                        <label for="lokasi" class="form-label">Lokasi <span class="fw-normal">(Masukkan kode embed lokasi yang ada di google maps)</span></label>
                         <textarea class="form-control border border-dark {{ $errors->has('lokasi') ? 'is-invalid' : '' }}" placeholder="Masukkan kode embed lokasi sekolah" name="lokasi" id="lokasi" rows="1">{{ old('lokasi') }}</textarea>
                         @if ($errors->has('lokasi'))
                             <div class="invalid-feedback">

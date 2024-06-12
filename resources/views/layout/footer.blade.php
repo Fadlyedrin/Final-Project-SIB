@@ -3,7 +3,7 @@
         <div class="row">
           <div class="col-md-3">
             <div class="logo text-light">
-              <img src="assets/logo.png" alt="">
+              <img src="{{asset('assets/logo.png')}}" alt="">
               <p class="mt-3">SchoolHub adalah sebuah website penyedia informasi terlengkap sekolah tingkat SMA di Kota X</p>
             </div>
           </div>

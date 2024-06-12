@@ -9,13 +9,15 @@ use App\Http\Controllers\SuperadminController;
 // Halaman user
 Route::get('/', [UserController::class, 'index'])->name('index');
 Route::get('/sekolah', [UserController::class, 'pencarianSekolah'])->name('sekolah');
-Route::get('/infosekolah', [UserController::class, 'pencarianInfo'])->name('infosekolah');
-Route::get('/dashboard', [UserController::class, 'dashboardSekolah'])->name('dashboardSekolah');
-Route::get('/guru', [UserController::class, 'guru'])->name('guru');
-Route::get('/prestasi', [UserController::class, 'prestasi'])->name('prestasi');
-Route::get('/detailprestasi', [UserController::class, 'detailPrestasi'])->name('detailPrestasi');
-Route::get('/info', [UserController::class, 'info'])->name('info');
-Route::get('/detailinfo', [UserController::class, 'detailInfo'])->name('detailInfo');
+Route::get('/infosekolah', [UserController::class, 'pencarianInfo'])->name('infoSekolah');
+Route::get('/carisekolah', [UserController::class, 'cariSekolah'])->name('cariSekolah');
+Route::get('/cariinfo', [UserController::class, 'cariInfo'])->name('cariInfo');
+Route::get('/dashboard/{sekolah}', [UserController::class, 'dashboardSekolah'])->name('dashboardSekolah');
+Route::get('/guru/{sekolah}', [UserController::class, 'guru'])->name('guru');
+Route::get('/prestasi/{sekolah}', [UserController::class, 'prestasi'])->name('prestasi');
+Route::get('/detailprestasi/{info}', [UserController::class, 'detailPrestasi'])->name('detailPrestasi');
+Route::get('/info/{sekolah}', [UserController::class, 'info'])->name('info');
+Route::get('/detailinfo/{info}', [UserController::class, 'detailInfo'])->name('detailInfo');
 
 // login, register, logout
 Route::get('/login', [AuthController::class, 'loginAdmin'])->name('loginAdmin');
@@ -26,7 +28,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Halaman admin & superadmin
 Route::prefix('')->middleware('authenticate')->group(function () {
-    Route::prefix('')->middleware('auth')->group(function () {
+    Route::prefix('logged')->middleware('auth')->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin');
         
         Route::get('/datasekolah', [AdminController::class, 'dataSekolah'])->name('dataSekolah');
@@ -51,6 +53,9 @@ Route::prefix('')->middleware('authenticate')->group(function () {
         Route::get('/editdatainfo/{info}', [AdminController::class, 'editDataInfo'])->name('editDataInfo');
         Route::put('/updatedatainfo/{info}', [AdminController::class , 'updateDataInfo'])->name('updateDataInfo');
         Route::delete('/deletedatainfo/{info}', [AdminController::class , 'deleteDataInfo'])->name('deleteDataInfo');
+
+        Route::get('/editdataadmin/{user}', [AdminController::class, 'editDataAdmin'])->name('editDataAdmin');
+        Route::put('/updatedataadmin/{user}', [AdminController::class , 'updateDataAdmin'])->name('updateDataAdmin');
         
         Route::prefix('')->middleware('role:superadmin')->group(function () {
             Route::get('/pengguna', [SuperadminController::class, 'dataPengguna'])->name('dataPengguna');

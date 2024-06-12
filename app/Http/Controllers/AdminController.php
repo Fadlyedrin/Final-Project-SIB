@@ -14,7 +14,9 @@ use App\Models\Sekolah;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
@@ -38,36 +40,45 @@ class AdminController extends Controller
     }
     public function storeDataSekolah(SekolahCreateRequest $request) 
     {
-        $file1 = $request->file('logo');
-        $fileName = time() . '_' . $file1->getClientOriginalName();
-        $file1->move('storage/logo_sekolah', $fileName);
+        DB::beginTransaction();
+        try {
+            $file1 = $request->file('logo');
+            $fileName = time() . '_' . $file1->getClientOriginalName();
+            $file1->move('storage/logo_sekolah', $fileName);
 
-        $sekolah = Sekolah::create([
-            'id_user' => Auth::user()->id,
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'no_telepon' => $request->no_telepon,
-            'email' => $request->email,
-            'deskripsi' => $request->deskripsi,
-            'visi' => $request->visi,
-            'misi' => $request->misi,
-            'logo' => '/storage/logo_sekolah/' . $fileName,
-            'lokasi' => $request->lokasi,
-        ]);
+            $sekolah = Sekolah::create([
+                'id_user' => Auth::user()->id,
+                'nama' => $request->nama,
+                'alamat' => $request->alamat,
+                'no_telepon' => $request->no_telepon,
+                'email' => $request->email,
+                'deskripsi' => $request->deskripsi,
+                'visi' => $request->visi,
+                'misi' => $request->misi,
+                'logo' => '/storage/logo_sekolah/' . $fileName,
+                'lokasi' => $request->lokasi,
+            ]);
 
-        if ($request->hasFile('gambar_sekolah')) {
-            foreach ($request->file('gambar_sekolah') as $file) {
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move('storage/gambar_sekolah', $fileName);
-    
-                GambarSekolah::create([
-                    'id_sekolah' => $sekolah->id,
-                    'gambar' => '/storage/gambar_sekolah/' . $fileName,
-                ]);
+            if ($request->hasFile('gambar_sekolah')) {
+                foreach ($request->file('gambar_sekolah') as $file) {
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move('storage/gambar_sekolah', $fileName);
+        
+                    GambarSekolah::create([
+                        'id_sekolah' => $sekolah->id,
+                        'gambar' => '/storage/gambar_sekolah/' . $fileName,
+                    ]);
+                }
             }
-        }
+            DB::commit();
 
-        return redirect()->route('dataSekolah')->with('success', 'Data Sekolah Berhasil dibuat.');
+            return redirect()->route('dataSekolah')->with('success', 'Data Sekolah Berhasil dibuat.');
+        } catch(\Exception $e) {
+            DB::rollBack();
+            Log::debug($e);
+            abort(400);
+        }
+        
     }
 
     public function editDataSekolah(Sekolah $sekolah) 
@@ -189,24 +200,32 @@ class AdminController extends Controller
     
     public function storeDataGuru(GuruCreateRequest $request) 
     {
-        $user = Auth::user();
-        $sekolah = $user->sekolah;
+        DB::beginTransaction();
+        try {
+            $user = Auth::user();
+            $sekolah = $user->sekolah;
+        
+            $file1 = $request->file('gambar');
+            $fileName = time() . '_' . $file1->getClientOriginalName();
+            $file1->move('storage/gambar_guru', $fileName);
     
-        $file1 = $request->file('gambar');
-        $fileName = time() . '_' . $file1->getClientOriginalName();
-        $file1->move('storage/gambar_guru', $fileName);
-
-        Guru::create([
-            'id_sekolah' => $sekolah->id,
-            'nama' => $request->nama,
-            'pendidikan' => $request->pendidikan,
-            'kategori_kepegawaian' => $request->kategori_kepegawaian,
-            'status' => $request->status,
-            'jabatan' => $request->jabatan,
-            'gambar' => '/storage/gambar_guru/' . $fileName,
-        ]);
-
-        return redirect()->route('dataGuru')->with('success', 'Data Guru Berhasil dibuat.');
+            Guru::create([
+                'id_sekolah' => $sekolah->id,
+                'nama' => $request->nama,
+                'pendidikan' => $request->pendidikan,
+                'kategori_kepegawaian' => $request->kategori_kepegawaian,
+                'status' => $request->status,
+                'jabatan' => $request->jabatan,
+                'gambar' => '/storage/gambar_guru/' . $fileName,
+            ]);
+            DB::commit();
+    
+            return redirect()->route('dataGuru')->with('success', 'Data Guru Berhasil dibuat.'); 
+        } catch(\Exception $e) {
+            DB::rollBack();
+            Log::debug($e);
+            abort(400);
+        }
     }
 
     public function editDataGuru(Guru $guru) 
@@ -302,29 +321,37 @@ class AdminController extends Controller
     
     public function storeDataInfo(InfoCreateRequest $request) 
     {
-        $user = Auth::user();
-        $sekolah = $user->sekolah;
+        DB::beginTransaction();
+        try {
+            $user = Auth::user();
+            $sekolah = $user->sekolah;
 
-        $info = Info::create([
-            'id_sekolah' => $sekolah->id,
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
-            'kategori' => $request->kategori,
-        ]);
+            $info = Info::create([
+                'id_sekolah' => $sekolah->id,
+                'judul' => $request->judul,
+                'deskripsi' => $request->deskripsi,
+                'kategori' => $request->kategori,
+            ]);
 
-        if ($request->hasFile('gambar_info')) {
-            foreach ($request->file('gambar_info') as $file) {
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move('storage/gambar_info', $fileName);
-    
-                GambarInfo::create([
-                    'id_info' => $info->id,
-                    'gambar' => '/storage/gambar_info/' . $fileName,
-                ]);
+            if ($request->hasFile('gambar_info')) {
+                foreach ($request->file('gambar_info') as $file) {
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move('storage/gambar_info', $fileName);
+        
+                    GambarInfo::create([
+                        'id_info' => $info->id,
+                        'gambar' => '/storage/gambar_info/' . $fileName,
+                    ]);
+                }
             }
-        }
+            DB::commit();
 
-        return redirect()->route('dataInfo')->with('success', 'Data Info Berhasil dibuat.');
+            return redirect()->route('dataInfo')->with('success', 'Data Info Berhasil dibuat.');
+        } catch(\Exception $e) {
+            DB::rollBack();
+            Log::debug($e);
+            abort(400);
+        }
     }
 
     public function editDataInfo(Info $info) 
@@ -383,5 +410,34 @@ class AdminController extends Controller
         
         $info->delete();
         return redirect()->route('dataInfo')->with('success', 'Data Info berhasil dihapus.');
+    }
+
+    //Edit data admin
+    public function editDataAdmin(User $user) 
+    {
+        return view('admin.editDataAdmin', compact('user'));
+    }
+    
+    public function updateDataAdmin(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => $request->email != $user->email ? 'required|email|unique:user,email' : 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('editDataAdmin', ['user' => Auth::user()->id])
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->no_telepon = $request->no_telepon;
+        
+        $user->save();
+            
+        return redirect()->route('editDataAdmin', ['user' => Auth::user()->id])
+        ->with('success', 'Data Admin Berhasil diubah.');
     }
 }

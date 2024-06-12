@@ -2,46 +2,73 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Info;
+use App\Models\Sekolah;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     public function index() 
     {
-        return view('users.index');
+        $infos = Info::latest()->take(2)->get();
+        $sekolahs = Sekolah::latest()->take(2)->get();
+        
+        return view('users.index', compact('infos', 'sekolahs'));
     }
 
     public function pencarianSekolah() 
     {
-        return view('users.pencarianSekolah');
+        $sekolahs = Sekolah::orderBy('created_at', 'desc')->get();
+        return view('users.pencarianSekolah', compact('sekolahs'));
     }
-    public function pencarianInfo() 
+    
+    public function cariSekolah(Request $request)
     {
-        return view('users.pencarianInfo');
+        $cari = $request->input('cari');
+        $sekolahs = Sekolah::where('nama', 'like', '%'.$cari.'%')->get();
+        return view('users.pencarianSekolah', compact('sekolahs'));
     }
 
-    public function dashboardSekolah() 
+    public function pencarianInfo() 
     {
-        return view('users.dashboardSekolah');
+        $infos = Info::orderBy('created_at', 'desc')->get();
+        return view('users.pencarianInfo', compact('infos'));
     }
-    public function guru() 
+
+    public function cariInfo(Request $request)
     {
-        return view('users.dataGuru');
+        $cari = $request->input('cari');
+        $infos = Info::where('judul', 'like', '%'.$cari.'%')->get();
+        return view('users.pencarianInfo', compact('infos'));
     }
-     public function prestasi() 
+
+    public function dashboardSekolah(Sekolah $sekolah) 
     {
-        return view('users.prestasi');
+        return view('users.dashboardSekolah', compact('sekolah'));
     }
-    public function detailPrestasi() 
+    public function guru(Sekolah $sekolah) 
     {
-        return view('users.detailPrestasi');
+        $gurus = $sekolah->guru;
+        return view('users.dataGuru', compact('sekolah', 'gurus'));
     }
-    public function info() 
+    public function prestasi(Sekolah $sekolah) 
     {
-        return view('users.info');
+        $infos = $sekolah->info()->where('kategori', 'prestasi')->get();
+        return view('users.prestasi', compact('sekolah', 'infos'));
     }
-    public function detailInfo() 
+    public function detailPrestasi(Info $info) 
     {
-        return view('users.detailInfo');
+        $sekolah = $info->sekolah;
+        return view('users.detailPrestasi', compact('info', 'sekolah'));
+    }
+    public function info(Sekolah $sekolah) 
+    {
+        $infos = $sekolah->info()->latest()->get();
+        return view('users.info', compact('sekolah', 'infos'));
+    }
+    public function detailInfo(Info $info) 
+    {
+        $sekolah = $info->sekolah;
+        return view('users.detailInfo', compact('info', 'sekolah'));
     }
 }

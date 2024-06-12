@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
       <div class="container">
         <a class="navbar-brand" href="{{ ('/') }}"
-          ><img src="assets/logo.png" alt=""
+          ><img src="{{asset('assets/logo.png')}}" alt=""
         /></a>
         <button
           class="navbar-toggler"

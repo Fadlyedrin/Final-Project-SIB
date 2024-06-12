@@ -14,7 +14,9 @@ use App\Models\Sekolah;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
@@ -49,21 +51,29 @@ class SuperadminController extends Controller
     }
     public function storeDataPengguna(UserCreateRequest $request) 
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'no_telepon' => $request->no_telepon, 
-        ]);
-
-        $roleName = $request->role == 'superadmin' ? 'superadmin' : 'admin';
-        $role = Role::where('name', $roleName)->first();
-
-        if ($role) {
-            $user->assignRole($role);
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'no_telepon' => $request->no_telepon, 
+            ]);
+    
+            $roleName = $request->role == 'superadmin' ? 'superadmin' : 'admin';
+            $role = Role::where('name', $roleName)->first();
+    
+            if ($role) {
+                $user->assignRole($role);
+            }
+            DB::commit();
+    
+            return redirect()->route('dataPengguna')->with('success', 'Data Admin Berhasil dibuat.');
+        } catch(\Exception $e) {
+            DB::rollBack();
+            Log::debug($e);
+            abort(400);
         }
-
-        return redirect()->route('dataPengguna')->with('success', 'Data Admin Berhasil dibuat.');
     }
 
     public function editDataPengguna(User $user) 
@@ -141,36 +151,44 @@ class SuperadminController extends Controller
     
     public function storeDataSekolah(SekolahCreateRequest $request) 
     {
-        $file1 = $request->file('logo');
-        $fileName = time() . '_' . $file1->getClientOriginalName();
-        $file1->move('storage/logo_sekolah', $fileName);
-
-        $sekolah = Sekolah::create([
-            'id_user' => $request->admin,
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'no_telepon' => $request->no_telepon,
-            'email' => $request->email,
-            'deskripsi' => $request->deskripsi,
-            'visi' => $request->visi,
-            'misi' => $request->misi,
-            'logo' => '/storage/logo_sekolah/' . $fileName,
-            'lokasi' => $request->lokasi,
-        ]);
-
-        if ($request->hasFile('gambar_sekolah')) {
-            foreach ($request->file('gambar_sekolah') as $file) {
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move('storage/gambar_sekolah', $fileName);
-
-                GambarSekolah::create([
-                    'id_sekolah' => $sekolah->id,
-                    'gambar' => '/storage/gambar_sekolah/' . $fileName,
-                ]);
+        DB::beginTransaction();
+        try {
+            $file1 = $request->file('logo');
+            $fileName = time() . '_' . $file1->getClientOriginalName();
+            $file1->move('storage/logo_sekolah', $fileName);
+    
+            $sekolah = Sekolah::create([
+                'id_user' => $request->admin,
+                'nama' => $request->nama,
+                'alamat' => $request->alamat,
+                'no_telepon' => $request->no_telepon,
+                'email' => $request->email,
+                'deskripsi' => $request->deskripsi,
+                'visi' => $request->visi,
+                'misi' => $request->misi,
+                'logo' => '/storage/logo_sekolah/' . $fileName,
+                'lokasi' => $request->lokasi,
+            ]);
+    
+            if ($request->hasFile('gambar_sekolah')) {
+                foreach ($request->file('gambar_sekolah') as $file) {
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move('storage/gambar_sekolah', $fileName);
+    
+                    GambarSekolah::create([
+                        'id_sekolah' => $sekolah->id,
+                        'gambar' => '/storage/gambar_sekolah/' . $fileName,
+                    ]);
+                }
             }
+            DB::commit();
+    
+            return redirect()->route('dataSekolahSuperadmin')->with('success', 'Data Sekolah Berhasil dibuat.');
+        } catch(\Exception $e) {
+            DB::rollBack();
+            Log::debug($e);
+            abort(400);
         }
-
-        return redirect()->route('dataSekolahSuperadmin')->with('success', 'Data Sekolah Berhasil dibuat.');
     }
 
     public function editDataSekolah(Sekolah $sekolah) 
@@ -284,23 +302,31 @@ class SuperadminController extends Controller
     
     public function storeDataGuru(GuruCreateRequest $request) 
     {
-        $idSekolah = $request->sekolah;
+        DB::beginTransaction();
+        try {
+            $idSekolah = $request->sekolah;
+        
+            $file1 = $request->file('gambar');
+            $fileName = time() . '_' . $file1->getClientOriginalName();
+            $file1->move('storage/gambar_guru', $fileName);
     
-        $file1 = $request->file('gambar');
-        $fileName = time() . '_' . $file1->getClientOriginalName();
-        $file1->move('storage/gambar_guru', $fileName);
-
-        Guru::create([
-            'id_sekolah' => $idSekolah,
-            'nama' => $request->nama,
-            'pendidikan' => $request->pendidikan,
-            'kategori_kepegawaian' => $request->kategori_kepegawaian,
-            'status' => $request->status,
-            'jabatan' => $request->jabatan,
-            'gambar' => '/storage/gambar_guru/' . $fileName,
-        ]);
-
-        return redirect()->route('dataGuruSuperadmin')->with('success', 'Data Guru Berhasil dibuat.');
+            Guru::create([
+                'id_sekolah' => $idSekolah,
+                'nama' => $request->nama,
+                'pendidikan' => $request->pendidikan,
+                'kategori_kepegawaian' => $request->kategori_kepegawaian,
+                'status' => $request->status,
+                'jabatan' => $request->jabatan,
+                'gambar' => '/storage/gambar_guru/' . $fileName,
+            ]);
+            DB::commit();
+    
+            return redirect()->route('dataGuruSuperadmin')->with('success', 'Data Guru Berhasil dibuat.');
+        } catch(\Exception $e) {
+            DB::rollBack();
+            Log::debug($e);
+            abort(400);
+        }
     }
 
     public function editDataGuru(Guru $guru) 
@@ -391,28 +417,36 @@ class SuperadminController extends Controller
     
     public function storeDataInfo(InfoCreateRequest $request) 
     {
-        $idSekolah = $request->sekolah;
-
-        $info = Info::create([
-            'id_sekolah' => $idSekolah,
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
-            'kategori' => $request->kategori,
-        ]);
-
-        if ($request->hasFile('gambar_info')) {
-            foreach ($request->file('gambar_info') as $file) {
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move('storage/gambar_info', $fileName);
+        DB::beginTransaction();
+        try {
+            $idSekolah = $request->sekolah;
     
-                GambarInfo::create([
-                    'id_info' => $info->id,
-                    'gambar' => '/storage/gambar_info/' . $fileName,
-                ]);
+            $info = Info::create([
+                'id_sekolah' => $idSekolah,
+                'judul' => $request->judul,
+                'deskripsi' => $request->deskripsi,
+                'kategori' => $request->kategori,
+            ]);
+    
+            if ($request->hasFile('gambar_info')) {
+                foreach ($request->file('gambar_info') as $file) {
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move('storage/gambar_info', $fileName);
+        
+                    GambarInfo::create([
+                        'id_info' => $info->id,
+                        'gambar' => '/storage/gambar_info/' . $fileName,
+                    ]);
+                }
             }
+            DB::commit();
+    
+            return redirect()->route('dataInfoSuperadmin')->with('success', 'Data Info Berhasil dibuat.');
+        } catch(\Exception $e) {
+            DB::rollBack();
+            Log::debug($e);
+            abort(400);
         }
-
-        return redirect()->route('dataInfoSuperadmin')->with('success', 'Data Info Berhasil dibuat.');
     }
 
     public function editDataInfo(Info $info) 
