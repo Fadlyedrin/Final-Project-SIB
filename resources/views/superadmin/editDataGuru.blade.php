@@ -16,7 +16,7 @@
                     <div>
                         <label for="selectedImage3" class="form-label">Logo</label>
                         <div class="mb-4 d-flex">
-                            <img id="selectedImage3" src="{{ asset('assets/inputfoto.png') }}" alt="gambar guru" style="width: 300px" />
+                            <img id="selectedImage3" src="{{ $guru->gambar ? asset($guru->gambar) : asset('assets/inputfoto.png') }}" alt="gambar guru" style="width: 300px" />
                         </div>
                         <div class="d-flex">
                             <div data-mdb-ripple-init class="btn btn-primary btn-rounded">

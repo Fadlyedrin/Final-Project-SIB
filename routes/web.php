@@ -26,7 +26,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Halaman admin & superadmin
 Route::prefix('')->middleware('authenticate')->group(function () {
-    Route::prefix('')->middleware('auth')->group(function () {
+    Route::prefix('logged')->middleware('auth')->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin');
         
         Route::get('/datasekolah', [AdminController::class, 'dataSekolah'])->name('dataSekolah');
@@ -51,6 +51,9 @@ Route::prefix('')->middleware('authenticate')->group(function () {
         Route::get('/editdatainfo/{info}', [AdminController::class, 'editDataInfo'])->name('editDataInfo');
         Route::put('/updatedatainfo/{info}', [AdminController::class , 'updateDataInfo'])->name('updateDataInfo');
         Route::delete('/deletedatainfo/{info}', [AdminController::class , 'deleteDataInfo'])->name('deleteDataInfo');
+
+        Route::get('/editdataadmin/{user}', [AdminController::class, 'editDataAdmin'])->name('editDataAdmin');
+        Route::put('/updatedataadmin/{user}', [AdminController::class , 'updateDataAdmin'])->name('updateDataAdmin');
         
         Route::prefix('')->middleware('role:superadmin')->group(function () {
             Route::get('/pengguna', [SuperadminController::class, 'dataPengguna'])->name('dataPengguna');

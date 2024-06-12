@@ -384,4 +384,33 @@ class AdminController extends Controller
         $info->delete();
         return redirect()->route('dataInfo')->with('success', 'Data Info berhasil dihapus.');
     }
+
+    //Edit data admin
+    public function editDataAdmin(User $user) 
+    {
+        return view('admin.editDataAdmin', compact('user'));
+    }
+    
+    public function updateDataAdmin(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => $request->email != $user->email ? 'required|email|unique:user,email' : 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('editDataAdmin', ['user' => Auth::user()->id])
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->no_telepon = $request->no_telepon;
+        
+        $user->save();
+            
+        return redirect()->route('editDataAdmin', ['user' => Auth::user()->id])
+        ->with('success', 'Data Admin Berhasil diubah.');
+    }
 }

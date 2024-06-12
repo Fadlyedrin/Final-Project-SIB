@@ -16,7 +16,7 @@
                         <div>
                             <label for="" class="form-label">Logo</label>
                             <div class="mb-4 d-flex justify-content-center">
-                                <img id="selectedImage" src="{{asset('assets/inputfoto.png')}}" alt="example placeholder" style="width: 300px" />
+                                <img id="selectedImage" src="{{ $sekolah->logo ? asset($sekolah->logo) : asset('assets/inputfoto.png') }}" alt="example placeholder" style="width: 300px" />
                             </div>
                             <div class="d-flex justify-content-center">
                                 <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
@@ -28,7 +28,7 @@
                         <div>
                             <label for="" class="form-label">Foto Sekolah</label>
                             <div class="mb-4 d-flex justify-content-center">
-                                <img id="selectedImage2" src="{{asset('assets/inputfoto.png')}}" alt="example placeholder" style="width: 300px" />
+                                <img id="selectedImage2" src="{{ $sekolah->gambarSekolah->first() ? asset($sekolah->gambarSekolah->first()->gambar) : asset('assets/inputfoto.png') }}" alt="example placeholder" style="width: 300px" />
                             </div>
                             <div class="d-flex justify-content-center">
                                 <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
