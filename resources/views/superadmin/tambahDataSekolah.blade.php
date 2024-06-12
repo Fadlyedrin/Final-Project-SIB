@@ -133,7 +133,7 @@
                             @foreach ($admins as $admin)
                                 <option value="{{ $admin->id }}">{{ $admin->name }}</option>
                             @endforeach
-                        </select>
+                        </select> 
                         @error('admin')
                             <div class="text-danger mt-2">{{ $message }}</div>
                         @enderror

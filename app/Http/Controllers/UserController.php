@@ -8,20 +8,20 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index() 
+    public function index()
     {
         $infos = Info::latest()->take(2)->get();
         $sekolahs = Sekolah::latest()->take(2)->get();
-        
+
         return view('users.index', compact('infos', 'sekolahs'));
     }
-
-    public function pencarianSekolah() 
+ 
+    public function pencarianSekolah()
     {
         $sekolahs = Sekolah::orderBy('created_at', 'desc')->get();
         return view('users.pencarianSekolah', compact('sekolahs'));
     }
-    
+
     public function cariSekolah(Request $request)
     {
         $cari = $request->input('cari');
@@ -29,7 +29,7 @@ class UserController extends Controller
         return view('users.pencarianSekolah', compact('sekolahs'));
     }
 
-    public function pencarianInfo() 
+    public function pencarianInfo()
     {
         $infos = Info::orderBy('created_at', 'desc')->get();
         return view('users.pencarianInfo', compact('infos'));
@@ -42,31 +42,31 @@ class UserController extends Controller
         return view('users.pencarianInfo', compact('infos'));
     }
 
-    public function dashboardSekolah(Sekolah $sekolah) 
+    public function dashboardSekolah(Sekolah $sekolah)
     {
         return view('users.dashboardSekolah', compact('sekolah'));
     }
-    public function guru(Sekolah $sekolah) 
+    public function guru(Sekolah $sekolah)
     {
         $gurus = $sekolah->guru;
         return view('users.dataGuru', compact('sekolah', 'gurus'));
     }
-    public function prestasi(Sekolah $sekolah) 
+    public function prestasi(Sekolah $sekolah)
     {
         $infos = $sekolah->info()->where('kategori', 'prestasi')->get();
         return view('users.prestasi', compact('sekolah', 'infos'));
     }
-    public function detailPrestasi(Info $info) 
+    public function detailPrestasi(Info $info)
     {
         $sekolah = $info->sekolah;
         return view('users.detailPrestasi', compact('info', 'sekolah'));
     }
-    public function info(Sekolah $sekolah) 
+    public function info(Sekolah $sekolah)
     {
         $infos = $sekolah->info()->latest()->get();
         return view('users.info', compact('sekolah', 'infos'));
     }
-    public function detailInfo(Info $info) 
+    public function detailInfo(Info $info)
     {
         $sekolah = $info->sekolah;
         return view('users.detailInfo', compact('info', 'sekolah'));

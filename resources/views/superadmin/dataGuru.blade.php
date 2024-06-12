@@ -80,7 +80,7 @@
         $(document).ready(function() {
             var table = $('#datatable-guru').DataTable({
                 paging: true,
-                responsive: true,
+                responsive: true, 
                 searching: true,
                 lengthMenu: [10, 20, 50, 100],
                 processing: true,

@@ -10,7 +10,8 @@
                     <div class="col-lg-8 offset-lg-2 text-center">
                         <form action="{{ route('cariSekolah') }}" method="GET">
                             <div class="search-form">
-                                <input class="form-control me-2" type="search" name="cari" placeholder="Cari Sekolah ..." aria-label="Search" />
+                                <input class="form-control me-2" type="search" name="cari" placeholder="Cari Sekolah ..."
+                                    aria-label="Search" />
                                 <button href="#hero"><i class="bi bi-search"></i></button>
                             </div>
                         </form>
@@ -22,10 +23,12 @@
                         <h1 class="my-3 fw-bold" style="font-size: 31px;">Temukan Informasi Terbaru SMA Pilihanmu</h1>
                         <p class=" my-3">
                             Tetap update dengan berita terbaru seputar pendidikan di Kota X,
-                            mulai dari prestasi sekolah hingga acara penting. SchoolHub adalah sumber terpercaya untuk memilih SMA terbaik dan
+                            mulai dari prestasi sekolah hingga acara penting. SchoolHub adalah sumber terpercaya untuk
+                            memilih SMA terbaik dan
                             mengikuti perkembangan pendidikan di Kota X.
                         </p>
-                        <a class="text-light text-decoration-none" href="{{ route('sekolah') }}"><button class="btn btn-primary fw-bold px-5">Telusuri SMA</button></a>
+                        <a class="text-light text-decoration-none" href="{{ route('sekolah') }}"><button
+                                class="btn btn-primary fw-bold px-5">Telusuri SMA</button></a>
                     </div>
                     <div class="col-4">
                         <img src="assets/hero-image.png" alt="" />
@@ -68,18 +71,35 @@
                         @foreach ($infos as $info)
                             <div class="col-8 offset-1 mt-4 w-100 d-flex">
                                 <div>
-                                    <a href="{{ route('detailInfo', ['info' => $info->id]) }}" class="my-4 mb-5 fw-bold text-dark text-decoration-none">{{ $info->judul }}</a>
+                                    <a href="{{ route('detailInfo', ['info' => $info->id]) }}"
+                                        class="my-4 mb-5 fw-bold text-dark text-decoration-none">{{ $info->judul }}</a>
                                     <p>{{ $info->created_at->diffForHumans() }} | {{ $info->sekolah->nama }}</p>
-                                    <p class="my-3" style="width: 90%; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
+                                    <p class="my-3"
+                                        style="width: 90%; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
                                         {{ $info->deskripsi }}</p>
                                 </div>
                                 <div class="m-auto">
-                                    <a href="{{ route('detailInfo', ['info' => $info->id]) }}"><img src="{{ $info->gambarInfo->first() ? asset($info->gambarInfo->first()->gambar) : asset('assets/gambar-info.png') }}" class="object-fit-cover rounded" width="150" height="150" alt="Gambar Info" /></a>
+                                    {{-- <a href="{{ route('detailInfo', ['info' => $info->id]) }}"><img src="{{ $info->gambarInfo->first() ? asset($info->gambarInfo->first()->gambar) : asset('assets/gambar-info.png') }}" class="object-fit-cover rounded" width="150" height="150" alt="Gambar Info" /></a> --}}
+
+                                    {{--  ini kode saya ambil dari  gambar info tapi datanya kosong --}}
+                                    @foreach ($info->gambarInfo as $gambar)
+                                        <a href="{{ route('detailInfo', ['info' => $info->id]) }}"><img
+                                                src="{{ asset($gambar->gambar) }}" class="object-fit-cover rounded"
+                                                width="150" height="150" alt="Gambar Info" /></a>
+                                    @endforeach
+                                    {{--  ini kode saya ambil dari tabel  gambar sekolah --}}
+                                    {{-- @foreach ($info->sekolah->gambarSekolah as $gambar)
+                                        <a href="{{ route('detailInfo', ['info' => $info->id]) }}"><img
+                                                src="{{ asset($gambar->gambar) }}" class="object-fit-cover rounded"
+                                                width="150" height="150" alt="Gambar Info" /></a>
+                                    @endforeach --}}
+
                                 </div>
                             </div>
                         @endforeach
                         <div class="d-flex justify-content-center mt-4">
-                            <a class="text-light text-decoration-none" href="{{ route('infoSekolah') }}"><button class="btn btn-primary fw-bold px-5">Info Lain</button></a>
+                            <a class="text-light text-decoration-none" href="{{ route('infoSekolah') }}"><button
+                                    class="btn btn-primary fw-bold px-5">Info Lain</button></a>
                         </div>
                     </div>
                 </div>
@@ -94,18 +114,24 @@
                         @foreach ($sekolahs as $sekolah)
                             <div class="col-8 offset-1 mt-4 w-100 d-flex">
                                 <div>
-                                    <a href="{{ route('dashboardSekolah', ['sekolah' => $sekolah->id]) }}" class="my-4 mb-5 fw-bold text-dark text-decoration-none">{{ $sekolah->nama }}</a>
+                                    <a href="{{ route('dashboardSekolah', ['sekolah' => $sekolah->id]) }}"
+                                        class="my-4 mb-5 fw-bold text-dark text-decoration-none">{{ $sekolah->nama }}</a>
                                     <p>{{ $sekolah->created_at->diffForHumans() }}</p>
-                                    <p class="my-3" style="width: 90%; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
+                                    <p class="my-3"
+                                        style="width: 90%; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
                                         {{ $sekolah->deskripsi }}</p>
                                 </div>
                                 <div class="m-auto">
-                                    <a href="{{ route('dashboardSekolah', ['sekolah' => $sekolah->id]) }}"><img src="{{ $sekolah->logo ? asset($sekolah->logo) : asset('assets/inputfoto.png') }}" class="object-fit-cover rounded" width="150" height="150" alt="Gambar Info" /></a>
+                                    <a href="{{ route('dashboardSekolah', ['sekolah' => $sekolah->id]) }}"><img
+                                            src="{{ $sekolah->logo ? asset($sekolah->logo) : asset('assets/inputfoto.png') }}"
+                                            class="object-fit-cover rounded" width="150" height="150"
+                                            alt="Gambar Info" /></a>
                                 </div>
                             </div>
                         @endforeach
                         <div class="d-flex justify-content-center mt-4">
-                            <a class="text-light text-decoration-none" href="{{ route('sekolah') }}"><button class="btn btn-primary fw-bold px-5">SMA Lain</button></a>
+                            <a class="text-light text-decoration-none" href="{{ route('sekolah') }}"><button
+                                    class="btn btn-primary fw-bold px-5">SMA Lain</button></a>
                         </div>
                     </div>
                 </div>
