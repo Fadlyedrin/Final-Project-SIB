@@ -16,7 +16,7 @@
                     <div>
                         <h4>Kelola Data Pengguna (Admin)</h4>
                         <p>Kelola data pengguna meliputi tambah, edit dan hapus</p>
-                    </div>
+                    </div> 
                 </div>
             @else
                 <div class="col-lg-9 col-md-8 offset-lg-2 offset-md-3 ml-sm-auto col-lg-10 px-md-4 py-4">
