@@ -22,10 +22,10 @@
                     <div class="col-7 offset-1" style="margin-top: 80px">
                         <h1 class="my-3 fw-bold" style="font-size: 31px;">Temukan Informasi Terbaru SMA Pilihanmu</h1>
                         <p class=" my-3">
-                            Tetap update dengan berita terbaru seputar pendidikan di Kota X,
+                            Tetap update dengan berita terbaru seputar pendidikan di Kota Surabaya,
                             mulai dari prestasi sekolah hingga acara penting. SchoolHub adalah sumber terpercaya untuk
                             memilih SMA terbaik dan
-                            mengikuti perkembangan pendidikan di Kota X.
+                            mengikuti perkembangan pendidikan di Kota Surabaya.
                         </p>
                         <a class="text-light text-decoration-none" href="{{ route('sekolah') }}"><button
                                 class="btn btn-primary fw-bold px-5">Telusuri SMA</button></a>
@@ -44,19 +44,19 @@
                         <h1 class="mb-4">Tentang Kami</h1>
                         <p>
                             Selamat datang di SchoolHub, portal informasi terlengkap untuk
-                            para pelajar, orang tua, dan pendidik di Kota X! Kami
-                            menyediakan kumpulan profil SMA dari seluruh Kota X, memberikan
+                            para pelajar, orang tua, dan pendidik di Kota Surabaya! Kami
+                            menyediakan kumpulan profil SMA dari seluruh Kota Surabaya, memberikan
                             gambaran menyeluruh mengenai setiap sekolah. Temukan sekolah
                             yang tepat dengan mudah melalui informasi detail mengenai
                             sekolah, prestasi, pengajar, dan lain sebagainya.
                         </p>
                         <p>
                             Selain itu, tetap terhubung dengan berita terbaru seputar dunia
-                            pendidikan di Kota X. Dapatkan update mengenai prestasi sekolah,
+                            pendidikan di Kota Surabaya. Dapatkan update mengenai prestasi sekolah,
                             kemenangan dalam lomba, acara penting, dan banyak lagi.
                             SchoolHub adalah sumber informasi terpercaya yang membantu Anda
                             menemukan dan memilih SMA terbaik serta mengikuti perkembangan
-                            terkini di dunia pendidikan Kota X.
+                            terkini di dunia pendidikan Kota Surabaya.
                         </p>
                     </div>
                 </div>
