@@ -2,7 +2,7 @@
 @section('title', 'Info Sekolah')
 
 @section('content')
-    <div class="container" style="margin-top: 50px">
+    <div class="container vh-100" style="margin-top: 50px">
         <div class="row">
             <div class="col-12 mb-5">
                 <h2 class="fw-bold text-center">Info Terkini</h2>

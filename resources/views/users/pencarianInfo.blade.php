@@ -17,7 +17,7 @@
         </div>
     </section>
 
-    <section class="info">
+    <section class="info vh-100">
         <div class="container">
             <div class="row mt-5">
                 <div class="col-9 offset-1">

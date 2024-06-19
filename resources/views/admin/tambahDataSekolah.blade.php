@@ -28,7 +28,7 @@
                         <div>
                             <label for="" class="form-label">Foto Sekolah</label>
                             <div class="mb-4 d-flex justify-content-center">
-                                <img id="selectedImage2" src="assets/inputfoto.png" alt="gambar sekolah" style="width: 300px" />
+                                <img id="selectedImage2" src="{{asset('assets/inputfoto.png')}}" alt="gambar sekolah" style="width: 300px" />
                             </div>
                             <div class="d-flex justify-content-center">
                                 <div data-mdb-ripple-init class="btn btn-primary btn-rounded">

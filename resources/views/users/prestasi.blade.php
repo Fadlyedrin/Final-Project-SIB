@@ -2,7 +2,7 @@
 @section('title', 'Prestasi Sekolah')
 
 @section('content')
-    <div class="container">
+    <div class="container vh-100">
         <div class="row" style="margin-top: 50px">
             <div class="col-12 mb-5">
                 <h2 class="fw-bold text-center">Galeri Prestasi</h2>
